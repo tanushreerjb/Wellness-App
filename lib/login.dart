@@ -32,82 +32,135 @@ class _LoginPageState extends State<LoginPage> {
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Text(
-            'Welcome Back!',
-            style: TextStyle(
-              fontSize: 20,
-              fontWeight: FontWeight.bold,
-              fontFamily: 'Poppins',
-              color: Colors.white,
-            ),
-          ),
-
-          TextField(
-            decoration: InputDecoration(
-              hintText: 'Enter your Email',
-              prefixIcon: Icon(
-                Icons.email_outlined,
-                size: 24.0,
-                color: Colors.white70,
+          SizedBox(
+            width: 360.0,
+            child: Text(
+              'Welcome Back!',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: 30,
+                fontWeight: FontWeight.bold,
+                fontFamily: 'Poppins',
+                color: Colors.white,
               ),
             ),
           ),
 
-          TextField(
-            decoration: InputDecoration(
-              hintText: 'Enter your password',
-              prefixIcon: Icon(
-                Icons.password_outlined,
-                size: 24.0,
-                color: Colors.white70,
+          SizedBox(
+            width: 370.0,
+            child: TextField(
+              decoration: InputDecoration(
+                hintText: 'Enter your Email',
+                prefixIcon: Icon(
+                  Icons.email_outlined,
+                  size: 24.0,
+                  color: Colors.white70,
+                ),
+              ),
+            ),
+          ),
+
+          SizedBox(
+            width: 370.0,
+            child: TextField(
+              decoration: InputDecoration(
+                hintText: 'Enter your password',
+                prefixIcon: Icon(
+                  Icons.password_outlined,
+                  size: 24.0,
+                  color: Colors.white70,
+                ),
               ),
             ),
           ),
 
           Row(
             children: [
-              Checkbox(
-                checkColor: Colors.black,
-                fillColor: WidgetStateProperty.resolveWith(getColor),
-                value: isChecked,
-                onChanged: (bool? value) {
-                  setState(() {
-                    isChecked = value!;
-                  });
-                },
+              SizedBox(
+                //width: 40,
+                child: Padding(
+                  padding: EdgeInsets.only(left: 10.0),
+                  //Adding padding to checkbox
+                  child: Checkbox(
+                    checkColor: Colors.black,
+                    fillColor: WidgetStateProperty.resolveWith(getColor),
+                    value: isChecked,
+                    onChanged: (bool? value) {
+                      setState(() {
+                        isChecked = value!;
+                      });
+                    },
+                  ),
+                ),
               ),
 
               Text('Remember Me'),
 
-              const SizedBox(width: 125),
-              //Adding space between the row elements
-              const Text('Forgot Password?'),
+              const SizedBox(width: 95), //Adding space between the row elements
+
+              Text('Forgot Password')
             ], //Row children
           ),
           SizedBox(
-            width: double.infinity,
+            height: 60.0,
+            width: 360.0,
             child: FilledButton(
-              onPressed: () {
-              },
+              style: const ButtonStyle(
+                backgroundColor: WidgetStatePropertyAll(Colors.white),
+              ),
+              onPressed: () {},
               child: const Text('Login'),
             ),
           ),
-          const SizedBox(height: 30),
+          //const SizedBox(height: 30),
 
           Text('or'),
 
+          // SizedBox(
+          //   height: 60.0,
+          //   width: 360.0,
+          //   child: FilledButton(
+          //     prefixIcon: Icon(
+          //       Icons.email_outlined,
+          //       size: 24.0,
+          //       color: Colors.white70,
+          //     ),
+          //     style: const ButtonStyle(
+          //       backgroundColor: WidgetStatePropertyAll(Colors.white),
+          //     ),
+          //     onPressed: () {},
+          //     child: const Text('Login with Google'),
+          //   ),
+          // ),
+
           SizedBox(
-            width: double.infinity,
+            height: 60.0,
+            width: 360.0,
             child: FilledButton(
-              onPressed: () {
-              },
-              child: const Text('Login with Google'),
+              style: const ButtonStyle(
+                backgroundColor: WidgetStatePropertyAll(Colors.white),
+              ),
+              onPressed: () {},
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(
+                    Icons.g_mobiledata,
+                    size: 35.0,
+                    color: Colors.black,
+                  ),
+                  //const SizedBox(width: 3),
+                  const Text(
+                    'Login with Google',
+                    style: TextStyle(color: Colors.black),
+                  ),
+                ],
+              ),
             ),
           ),
           const SizedBox(height: 30),
 
-          Text('Dont have an account? Create Account')
-
+          Text('Dont have an account? Create Account'),
         ], //Children
       ),
     );

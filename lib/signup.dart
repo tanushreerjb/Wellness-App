@@ -109,9 +109,8 @@ class _SignupPageState extends State<SignupPage> {
 
               Text('Remember Me'),
 
-              const SizedBox(width: 95), //Adding space between the row elements
+              const SizedBox(width: 95 ), //Adding space between the row elements
 
-              const Text('Forgot Password?', textAlign: TextAlign.right,),
             ], //Row children
           ),
           SizedBox(
