@@ -82,8 +82,32 @@ class _LoginPageState extends State<LoginPage> {
               const SizedBox(width: 125),
               //Adding space between the row elements
               const Text('Forgot Password?'),
-            ],
+            ], //Row children
           ),
+          SizedBox(
+            width: double.infinity,
+            child: FilledButton(
+              onPressed: () {
+              },
+              child: const Text('Login'),
+            ),
+          ),
+          const SizedBox(height: 30),
+
+          Text('or'),
+
+          SizedBox(
+            width: double.infinity,
+            child: FilledButton(
+              onPressed: () {
+              },
+              child: const Text('Login with Google'),
+            ),
+          ),
+          const SizedBox(height: 30),
+
+          Text('Dont have an account? Create Account')
+
         ], //Children
       ),
     );

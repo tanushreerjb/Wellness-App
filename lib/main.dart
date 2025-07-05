@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:wellness_app/login.dart';
+import 'package:wellness_app/signup.dart';
 
 void main() {
   runApp(const WellnessApp());
