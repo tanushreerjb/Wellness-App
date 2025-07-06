@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:wellness_app/login.dart';
 import 'package:wellness_app/signup.dart';
+import 'package:wellness_app/userpreference.dart';
+import 'package:wellness_app/dashboard.dart';
 
 void main() {
   runApp(const WellnessApp());
@@ -56,7 +58,7 @@ class WellnessApp extends StatelessWidget {
         textTheme: TextTheme(bodyMedium: TextStyle(color: Colors.white)),
         hoverColor: Colors.transparent,
       ),
-      home: const LoginPage(),
+      home: const UserpreferencePage(),
     );
   }
 }

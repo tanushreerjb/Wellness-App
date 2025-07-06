@@ -160,7 +160,7 @@ class _LoginPageState extends State<LoginPage> {
           ),
           const SizedBox(height: 30),
 
-          Text('Dont have an account? Create Account'),
+          Text("Don't have an account? Create Account"),
         ], //Children
       ),
     );

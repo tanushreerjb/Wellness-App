@@ -28,8 +28,7 @@ class _SignupPageState extends State<SignupPage> {
     return Scaffold(
       backgroundColor: Colors.black,
       body: Column(
-        spacing: 20,
-        //equal spacing of 10
+        spacing: 20, //equal spacing of 10
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
