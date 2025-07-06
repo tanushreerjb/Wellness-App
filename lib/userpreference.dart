@@ -12,7 +12,6 @@ class _UserpreferencePageState extends State<UserpreferencePage> {
   bool isChecked = false;
   bool isPressed = false;
 
-
   @override
   Widget build(BuildContext context) {
     Color getColor(Set<WidgetState> states) {
@@ -62,16 +61,21 @@ class _UserpreferencePageState extends State<UserpreferencePage> {
                     width: 175,
                     child: FilledButton(
                       style: FilledButton.styleFrom(
-                        backgroundColor: isPressed ? Colors.white : Colors.white30,
+                        backgroundColor: isPressed
+                            ? Colors.white
+                            : Colors.white30,
                       ),
                       onPressed: () {
                         setState(() {
                           isPressed = !isPressed;
                         });
-                      },//onPressed
+                      }, //onPressed
 
                       child: Text(
-                        'Hard Times', style: TextStyle(color: isPressed ? Colors.black : Colors.white),
+                        'Hard Times',
+                        style: TextStyle(
+                          color: isPressed ? Colors.black : Colors.white,
+                        ),
                       ),
                     ),
                   ),
@@ -80,17 +84,26 @@ class _UserpreferencePageState extends State<UserpreferencePage> {
                     height: 50,
                     width: 175,
                     child: FilledButton(
-                      //R2C1
-                      style: const ButtonStyle(
-                        backgroundColor: WidgetStatePropertyAll(Colors.white30),
+                      style: FilledButton.styleFrom(
+                        backgroundColor: isPressed
+                            ? Colors.white
+                            : Colors.white30,
                       ),
-                      onPressed: () {},
-                      child: const Text(
-                        'Working Out',
-                        style: TextStyle(color: Colors.white),
+                      onPressed: () {
+                        setState(() {
+                          isPressed = !isPressed;
+                        });
+                      }, //onPressed
+
+                      child: Text(
+                        'Hard Times',
+                        style: TextStyle(
+                          color: isPressed ? Colors.black : Colors.white,
+                        ),
                       ),
                     ),
                   ),
+
                 ], //Children
               ),
 
@@ -104,14 +117,22 @@ class _UserpreferencePageState extends State<UserpreferencePage> {
                     height: 50,
                     width: 175,
                     child: FilledButton(
-                      //R1C1
-                      style: const ButtonStyle(
-                        backgroundColor: WidgetStatePropertyAll(Colors.white30),
+                      style: FilledButton.styleFrom(
+                        backgroundColor: isPressed
+                            ? Colors.white
+                            : Colors.white30,
                       ),
-                      onPressed: () {},
-                      child: const Text(
-                        'Productivity',
-                        style: TextStyle(color: Colors.white),
+                      onPressed: () {
+                        setState(() {
+                          isPressed = !isPressed;
+                        });
+                      }, //onPressed
+
+                      child: Text(
+                        'Hard Times',
+                        style: TextStyle(
+                          color: isPressed ? Colors.black : Colors.white,
+                        ),
                       ),
                     ),
                   ),
@@ -120,17 +141,26 @@ class _UserpreferencePageState extends State<UserpreferencePage> {
                     height: 50,
                     width: 175,
                     child: FilledButton(
-                      //R2C1
-                      style: const ButtonStyle(
-                        backgroundColor: WidgetStatePropertyAll(Colors.white30),
+                      style: FilledButton.styleFrom(
+                        backgroundColor: isPressed
+                            ? Colors.white
+                            : Colors.white30,
                       ),
-                      onPressed: () {},
-                      child: const Text(
-                        'Self esteem',
-                        style: TextStyle(color: Colors.white),
+                      onPressed: () {
+                        setState(() {
+                          isPressed = !isPressed;
+                        });
+                      }, //onPressed
+
+                      child: Text(
+                        'Hard Times',
+                        style: TextStyle(
+                          color: isPressed ? Colors.black : Colors.white,
+                        ),
                       ),
                     ),
                   ),
+
                 ],
               ),
 
@@ -144,14 +174,22 @@ class _UserpreferencePageState extends State<UserpreferencePage> {
                     height: 50,
                     width: 175,
                     child: FilledButton(
-                      //R1C1
-                      style: const ButtonStyle(
-                        backgroundColor: WidgetStatePropertyAll(Colors.white30),
+                      style: FilledButton.styleFrom(
+                        backgroundColor: isPressed
+                            ? Colors.white
+                            : Colors.white30,
                       ),
-                      onPressed: () {},
-                      child: const Text(
-                        'Achieving Goals',
-                        style: TextStyle(color: Colors.white),
+                      onPressed: () {
+                        setState(() {
+                          isPressed = !isPressed;
+                        });
+                      }, //onPressed
+
+                      child: Text(
+                        'Hard Times',
+                        style: TextStyle(
+                          color: isPressed ? Colors.black : Colors.white,
+                        ),
                       ),
                     ),
                   ),
@@ -160,17 +198,26 @@ class _UserpreferencePageState extends State<UserpreferencePage> {
                     height: 50,
                     width: 175,
                     child: FilledButton(
-                      //R2C1
-                      style: const ButtonStyle(
-                        backgroundColor: WidgetStatePropertyAll(Colors.white30),
+                      style: FilledButton.styleFrom(
+                        backgroundColor: isPressed
+                            ? Colors.white
+                            : Colors.white30,
                       ),
-                      onPressed: () {},
-                      child: const Text(
-                        'Inspiration',
-                        style: TextStyle(color: Colors.white),
+                      onPressed: () {
+                        setState(() {
+                          isPressed = !isPressed;
+                        });
+                      }, //onPressed
+
+                      child: Text(
+                        'Hard Times',
+                        style: TextStyle(
+                          color: isPressed ? Colors.black : Colors.white,
+                        ),
                       ),
                     ),
                   ),
+
                 ],
               ),
 
@@ -184,158 +231,32 @@ class _UserpreferencePageState extends State<UserpreferencePage> {
                     height: 50,
                     width: 175,
                     child: FilledButton(
-                      //R1C1
-                      style: const ButtonStyle(
-                        backgroundColor: WidgetStatePropertyAll(Colors.white30),
+                      style: FilledButton.styleFrom(
+                        backgroundColor: isPressed
+                            ? Colors.white
+                            : Colors.white30,
                       ),
-                      onPressed: () {},
-                      child: const Text(
-                        'Achieving Goals',
-                        style: TextStyle(color: Colors.white),
-                      ),
-                    ),
-                  ),
+                      onPressed: () {
+                        setState(() {
+                          isPressed = !isPressed;
+                        });
+                      }, //onPressed
 
-                  SizedBox(
-                    height: 50,
-                    width: 175,
-                    child: FilledButton(
-                      //R2C1
-                      style: const ButtonStyle(
-                        backgroundColor: WidgetStatePropertyAll(Colors.white30),
-                      ),
-                      onPressed: () {},
-                      child: const Text(
-                        'Inspiration',
-                        style: TextStyle(color: Colors.white),
+                      child: Text(
+                        'Hard Times',
+                        style: TextStyle(
+                          color: isPressed ? Colors.black : Colors.white,
+                        ),
                       ),
                     ),
+
                   ),
-                ],
+                ], //Children
+
               ),
-
-              const SizedBox(height: 15),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                spacing: 15.0,
-                children: [
-                  SizedBox(
-                    height: 50,
-                    width: 175,
-                    child: FilledButton(
-                      //R1C1
-                      style: const ButtonStyle(
-                        backgroundColor: WidgetStatePropertyAll(Colors.white30),
-                      ),
-                      onPressed: () {},
-                      child: const Text(
-                        'Achieving Goals',
-                        style: TextStyle(color: Colors.white),
-                      ),
-                    ),
-                  ),
-
-                  SizedBox(
-                    height: 50,
-                    width: 175,
-                    child: FilledButton(
-                      //R2C1
-                      style: const ButtonStyle(
-                        backgroundColor: WidgetStatePropertyAll(Colors.white30),
-                      ),
-                      onPressed: () {},
-                      child: const Text(
-                        'Inspiration',
-                        style: TextStyle(color: Colors.white),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-
-              const SizedBox(height: 15),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                spacing: 15.0,
-                children: [
-                  SizedBox(
-                    height: 50,
-                    width: 175,
-                    child: FilledButton(
-                      //R1C1
-                      style: const ButtonStyle(
-                        backgroundColor: WidgetStatePropertyAll(Colors.white30),
-                      ),
-                      onPressed: () {},
-                      child: const Text(
-                        'Achieving Goals',
-                        style: TextStyle(color: Colors.white),
-                      ),
-                    ),
-                  ),
-
-                  SizedBox(
-                    height: 50,
-                    width: 175,
-                    child: FilledButton(
-                      //R2C1
-                      style: const ButtonStyle(
-                        backgroundColor: WidgetStatePropertyAll(Colors.white30),
-                      ),
-                      onPressed: () {},
-                      child: const Text(
-                        'Inspiration',
-                        style: TextStyle(color: Colors.white),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-
-              const SizedBox(height: 15),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                spacing: 15.0,
-                children: [
-                  SizedBox(
-                    height: 50,
-                    width: 175,
-                    child: FilledButton(
-                      //R1C1
-                      style: const ButtonStyle(
-                        backgroundColor: WidgetStatePropertyAll(Colors.white30),
-                      ),
-                      onPressed: () {},
-                      child: const Text(
-                        'Achieving Goals',
-                        style: TextStyle(color: Colors.white),
-                      ),
-                    ),
-                  ),
-
-                  SizedBox(
-                    height: 50,
-                    width: 175,
-                    child: FilledButton(
-                      //R2C1
-                      style: const ButtonStyle(
-                        backgroundColor: WidgetStatePropertyAll(Colors.white30),
-                      ),
-                      onPressed: () {},
-                      child: const Text(
-                        'Inspiration',
-                        style: TextStyle(color: Colors.white),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ],
+            ], //Children
           ),
-        ], //Children
+        ],//Children
       ),
     );
   }

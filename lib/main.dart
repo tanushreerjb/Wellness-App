@@ -58,7 +58,7 @@ class WellnessApp extends StatelessWidget {
         textTheme: TextTheme(bodyMedium: TextStyle(color: Colors.white)),
         hoverColor: Colors.transparent,
       ),
-      home: const UserpreferencePage(),
+      home: const DashboardPage(),
     );
   }
 }
