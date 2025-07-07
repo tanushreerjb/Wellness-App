@@ -3,6 +3,8 @@ import 'package:wellness_app/login.dart';
 import 'package:wellness_app/signup.dart';
 import 'package:wellness_app/userpreference.dart';
 import 'package:wellness_app/dashboard.dart';
+import 'package:wellness_app/profile.dart';
+import 'package:wellness_app/quote.dart';
 
 void main() {
   runApp(const WellnessApp());
@@ -15,6 +17,7 @@ class WellnessApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       title: 'Week 2 Workshop',
       theme: ThemeData(
         fontFamily: 'Poppins',
@@ -58,7 +61,13 @@ class WellnessApp extends StatelessWidget {
         textTheme: TextTheme(bodyMedium: TextStyle(color: Colors.white)),
         hoverColor: Colors.transparent,
       ),
-      home: const DashboardPage(),
+
+      home: const LoginPage(),
+      // home: const SignupPage(),
+      // home: const UserpreferencePage(),
+      // home: const DashboardPage(),
+      // home: const ProfilePage(),
+      // home: const QuotePage(),
     );
   }
 }

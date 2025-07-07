@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hugeicons/hugeicons.dart';
+import 'package:wellness_app/login.dart';
+import 'package:wellness_app/userpreference.dart';
 
 class SignupPage extends StatefulWidget {
   const SignupPage({super.key});
@@ -92,24 +94,25 @@ class _SignupPageState extends State<SignupPage> {
             children: [
               SizedBox(
                 //width: 40,
-                child: Padding(padding: EdgeInsets.only(left:10.0),//Adding padding to checkbox
-                child: Checkbox(
-                  checkColor: Colors.black,
-                  fillColor: WidgetStateProperty.resolveWith(getColor),
-                  value: isChecked,
-                  onChanged: (bool? value) {
-                    setState(() {
-                      isChecked = value!;
-                    });
-                  },
+                child: Padding(
+                  padding: EdgeInsets.only(left: 10.0),
+                  //Adding padding to checkbox
+                  child: Checkbox(
+                    checkColor: Colors.black,
+                    fillColor: WidgetStateProperty.resolveWith(getColor),
+                    value: isChecked,
+                    onChanged: (bool? value) {
+                      setState(() {
+                        isChecked = value!;
+                      });
+                    },
+                  ),
                 ),
-              ),
               ),
 
               Text('Remember Me'),
 
-              const SizedBox(width: 95 ), //Adding space between the row elements
-
+              const SizedBox(width: 95), //Adding space between the row elements
             ], //Row children
           ),
           SizedBox(
@@ -119,7 +122,12 @@ class _SignupPageState extends State<SignupPage> {
               style: const ButtonStyle(
                 backgroundColor: WidgetStatePropertyAll(Colors.white),
               ),
-              onPressed: () {},
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => UserpreferencePage()),
+                );
+              },
               child: const Text('Signup'),
             ),
           ),
@@ -138,9 +146,27 @@ class _SignupPageState extends State<SignupPage> {
               child: const Text('Signup with Google'),
             ),
           ),
-          const SizedBox(height: 30),
 
-          Text('Already have an account? Login'),
+          //const SizedBox(height: 30),
+          //SizedBox(height: 0.5),
+          Text('Already have an account?', style: TextStyle(fontSize: 16)),
+          // Alternative: Using TextButton
+          TextButton(
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => LoginPage()),
+              );
+            },
+            child: Text(
+              'Login',
+              style: TextStyle(
+                fontSize: 15,
+                color: Colors.white,
+                decoration: TextDecoration.underline,
+              ),
+            ),
+          ),
         ], //Children
       ),
     );

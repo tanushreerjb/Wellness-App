@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:wellness_app/profile.dart';
+import 'package:wellness_app/quote.dart';
 
 class DashboardPage extends StatefulWidget {
   const DashboardPage({super.key});
@@ -26,21 +28,47 @@ class _DashboardPageState extends State<DashboardPage> {
 
     return Scaffold(
       backgroundColor: Colors.black,
+      appBar: AppBar(
+        backgroundColor: Colors.black,
+        title: const Text(
+          'Explore',
+          style: TextStyle(
+            fontFamily: 'Poppins',
+            fontWeight: FontWeight.bold,
+            color: Colors.white,
+          ),
+        ),
+        automaticallyImplyLeading: false,
+        actions: [
+          RawMaterialButton(
+            child: CircleAvatar(
+              radius: 20,
+              backgroundImage: AssetImage('assets/images/Tanushree.JPG'),
+            ),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => ProfilePage()),
+              );
+            },
+          ),
+        ],
+      ),
       body: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        spacing: 24,
+        mainAxisAlignment: MainAxisAlignment.start,
+        spacing: 10,
         //crossAxisAlignment: CrossAxisAlignment.center,
         //mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          SizedBox(
-            child:
-            Row(
+
+          /*SizedBox(
+            child: Row(
               children: [
-                SizedBox(width: 35,),
+                SizedBox(width: 23),
                 Text(
                   "Explore",
                   style: TextStyle(
-                    fontSize: 30,
+                    fontSize: 25,
                     fontWeight: FontWeight.bold,
                     fontFamily: 'Poppins',
                     color: Colors.white,
@@ -48,16 +76,22 @@ class _DashboardPageState extends State<DashboardPage> {
                 ),
               ],
             ),
-          ),
+          ),*/
 
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
               SizedBox(
                 width: 180.0,
+                height: 55,
                 child: FilledButton(
                   style: ButtonStyle(
                     backgroundColor: WidgetStatePropertyAll(Colors.white30),
+                    shape: WidgetStatePropertyAll(
+                      RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(16.0),
+                      ),
+                    ),
                   ),
                   onPressed: () {},
                   child: Text(
@@ -70,9 +104,15 @@ class _DashboardPageState extends State<DashboardPage> {
               /*const SizedBox(width: 50),*/
               SizedBox(
                 width: 180.0,
+                height: 55,
                 child: FilledButton(
                   style: ButtonStyle(
                     backgroundColor: WidgetStatePropertyAll(Colors.white30),
+                    shape: WidgetStatePropertyAll(
+                      RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(16.0),
+                      ),
+                    ),
                   ),
                   onPressed: () {},
                   child: Text(
@@ -86,11 +126,11 @@ class _DashboardPageState extends State<DashboardPage> {
 
           Row(
             children: [
-              SizedBox(width: 35,),
+              SizedBox(width: 23),
               Text(
                 "Today's Quote",
                 style: TextStyle(
-                  fontSize: 30,
+                  fontSize: 25,
                   fontWeight: FontWeight.bold,
                   fontFamily: 'Poppins',
                   color: Colors.white,
@@ -106,9 +146,15 @@ class _DashboardPageState extends State<DashboardPage> {
                 width: 370.0,
                 height: 80.0,
                 child: FilledButton(
-                  style: FilledButton.styleFrom(backgroundColor: (Colors.white30)),
-
-                  onPressed: (){},
+                  style: ButtonStyle(
+                    backgroundColor: WidgetStatePropertyAll(Colors.white30),
+                    shape: WidgetStatePropertyAll(
+                      RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(16.0),
+                      ),
+                    ),
+                  ),
+                  onPressed: () {},
                   child: Text(
                     '"Your wellness is an investment, not an expense" - Author Name',
                     style: TextStyle(color: Colors.white),
@@ -119,15 +165,27 @@ class _DashboardPageState extends State<DashboardPage> {
           ),
 
           Row(
+            mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              SizedBox(width: 35,),
-              Text(
-                "Quotes",
-                style: TextStyle(
-                  fontSize: 30,
-                  fontWeight: FontWeight.bold,
-                  fontFamily: 'Poppins',
-                  color: Colors.white,
+              SizedBox(
+                width: 370.0,
+                height: 80.0,
+                child: TextButton(
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => QuotePage()),
+                    );
+                  },
+                  child: Text(
+                    'Quotes',
+                    style: TextStyle(
+                      fontSize: 30,
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                      decoration: TextDecoration.underline,
+                    ),
+                  ),
                 ),
               ),
             ],
@@ -140,13 +198,75 @@ class _DashboardPageState extends State<DashboardPage> {
                 width: 350.0,
                 height: 60.0,
                 child: FilledButton.icon(
-                  style: FilledButton.styleFrom(alignment: Alignment.centerLeft,
-                    backgroundColor: (Colors.white30),
+                  style: ButtonStyle(
+                    alignment: Alignment.centerLeft,
+                    backgroundColor: WidgetStatePropertyAll(Colors.white30),
+                    shape: WidgetStatePropertyAll(
+                      RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(20.0),
+                      ),
+                    ),
                   ),
                   onPressed: () {},
-                  icon: Icon(Icons.sunny, size: 20, color: Colors.white,),
-                  label: Text('Feeling Blessed',
-                    style: TextStyle(color: Colors.white),),
+                  icon: Icon(Icons.sunny, size: 20, color: Colors.white),
+                  label: Text(
+                    'Feeling Blessed',
+                    style: TextStyle(color: Colors.white),
+                  ),
+                ),
+              ),
+            ],
+          ),
+
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              SizedBox(
+                width: 350.0,
+                height: 60.0,
+                child: FilledButton.icon(
+                  onPressed: () {},
+                  icon: Icon(Icons.paid_rounded, size: 20, color: Colors.white),
+                  style: ButtonStyle(
+                    alignment: Alignment.centerLeft,
+                    backgroundColor: WidgetStatePropertyAll(Colors.white30),
+                    shape: WidgetStatePropertyAll(
+                      RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(20.0),
+                      ),
+                    ),
+                  ),
+                  label: Text(
+                    'Pride Month',
+                    style: TextStyle(color: Colors.white),
+                  ),
+                ),
+              ),
+            ],
+          ),
+
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              SizedBox(
+                width: 350.0,
+                height: 60.0,
+                child: FilledButton.icon(
+                  onPressed: () {},
+                  icon: Icon(Icons.star_border, size: 20, color: Colors.white),
+                  style: ButtonStyle(
+                    alignment: Alignment.centerLeft,
+                    backgroundColor: WidgetStatePropertyAll(Colors.white30),
+                    shape: WidgetStatePropertyAll(
+                      RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(20.0),
+                      ),
+                    ),
+                  ),
+                  label: Text(
+                    'Self Worth',
+                    style: TextStyle(color: Colors.white),
+                  ),
                 ),
               ),
             ],
@@ -161,59 +281,28 @@ class _DashboardPageState extends State<DashboardPage> {
                 child: FilledButton.icon(
                   onPressed: () {},
                   icon: Icon(
-                    Icons.paid_rounded, size: 20, color: Colors.white,),
-                  style: FilledButton.styleFrom(alignment: Alignment.centerLeft,
-                    backgroundColor: (Colors.white30),
+                    Icons.ac_unit_rounded,
+                    size: 20,
+                    color: Colors.white,
                   ),
-                  label: Text('Pride Month',
-                    style: TextStyle(color: Colors.white),),
+                  style: ButtonStyle(
+                    alignment: Alignment.centerLeft,
+                    backgroundColor: WidgetStatePropertyAll(Colors.white30),
+                    shape: WidgetStatePropertyAll(
+                      RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(20.0),
+                      ),
+                    ),
+                  ),
+                  label: Text('Love', style: TextStyle(color: Colors.white)),
                 ),
               ),
             ],
           ),
 
           Row(
-            mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              SizedBox(
-                width: 350.0,
-                height: 60.0,
-                child: FilledButton.icon(
-                  onPressed: () {},
-                  icon: Icon(Icons.star_border, size: 20, color: Colors.white,),
-                  style: FilledButton.styleFrom(alignment: Alignment.centerLeft,
-                    backgroundColor: (Colors.white30),
-                  ),
-                  label: Text('Self Worth',
-                    style: TextStyle(color: Colors.white),),
-                ),
-              ),
-            ],
-          ),
-
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              SizedBox(
-                width: 350.0,
-                height: 60.0,
-                child: FilledButton.icon(
-                  onPressed: () {},
-                  icon: Icon(
-                    Icons.ac_unit_rounded, size: 20, color: Colors.white,),
-                  style: FilledButton.styleFrom(alignment: Alignment.centerLeft,
-                    backgroundColor: (Colors.white30),
-                  ),
-                  label: Text('Love',
-                    style: TextStyle(color: Colors.white),),
-                ),
-              ),
-            ],
-          ),
-
-          Row(
-            children:[
-              SizedBox(width: 35,),
+              SizedBox(width: 35),
               Text(
                 "Health Tips",
                 style: TextStyle(
@@ -234,16 +323,26 @@ class _DashboardPageState extends State<DashboardPage> {
                 height: 70.0,
                 child: FilledButton.icon(
                   onPressed: () {},
-                  icon: Icon(Icons.sunny, size: 20, color: Colors.white,),
-                  style: FilledButton.styleFrom(alignment: Alignment.centerLeft,
-                    backgroundColor: (Colors.white30),
+                  icon: Icon(Icons.sunny, size: 20, color: Colors.white),
+                  style: ButtonStyle(
+                    alignment: Alignment.centerLeft,
+                    backgroundColor: WidgetStatePropertyAll(Colors.white30),
+                    shape: WidgetStatePropertyAll(
+                      RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(20.0),
+                      ),
+                    ),
                   ),
-                  label: Text('Breathe to Reset',
-                    style: TextStyle(color: Colors.white),),
+                  label: Text(
+                    'Breathe to Reset',
+                    style: TextStyle(color: Colors.white),
+                  ),
                 ),
               ),
             ],
           ),
+
+
         ], //Children
       ),
     );

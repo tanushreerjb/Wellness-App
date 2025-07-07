@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hugeicons/hugeicons.dart';
+import 'package:wellness_app/dashboard.dart';
+import 'package:wellness_app/signup.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -104,12 +106,18 @@ class _LoginPageState extends State<LoginPage> {
           SizedBox(
             height: 60.0,
             width: 360.0,
-            child: FilledButton(
+            child: TextButton(
               style: const ButtonStyle(
                 backgroundColor: WidgetStatePropertyAll(Colors.white),
               ),
-              onPressed: () {},
-              child: const Text('Login'),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => DashboardPage()),
+                );
+              },
+              child: const Text('Login',
+              style: TextStyle(color: Colors.black),),
             ),
           ),
           //const SizedBox(height: 30),
@@ -158,9 +166,26 @@ class _LoginPageState extends State<LoginPage> {
               ),
             ),
           ),
-          const SizedBox(height: 30),
 
-          Text("Don't have an account? Create Account"),
+          /*const SizedBox(height: 30),
+          SizedBox(height: 0.5),*/
+
+          Text("Don't have an account?",
+          style: TextStyle(fontSize: 16)),
+          // Alternative: Using TextButton
+          TextButton(
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => SignupPage()),
+              );
+            },
+            child: Text(
+              'Sign Up',
+              style: TextStyle(fontSize: 15, color: Colors.white, fontWeight: FontWeight.normal,decoration: TextDecoration.underline),
+            ),
+          ),
+
         ], //Children
       ),
     );

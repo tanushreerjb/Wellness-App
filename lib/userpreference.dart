@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hugeicons/hugeicons.dart';
+import 'package:wellness_app/dashboard.dart';
 
 class UserpreferencePage extends StatefulWidget {
   const UserpreferencePage({super.key});
@@ -10,7 +11,16 @@ class UserpreferencePage extends StatefulWidget {
 
 class _UserpreferencePageState extends State<UserpreferencePage> {
   bool isChecked = false;
-  bool isPressed = false;
+  bool var1 = false;
+  bool var2 = false;
+  bool var3 = false;
+  bool var4 = false;
+  bool var5 = false;
+  bool var6 = false;
+  bool var7 = false;
+  bool var8 = false;
+  bool var9 = false;
+  bool var10 = false;
 
   @override
   Widget build(BuildContext context) {
@@ -61,20 +71,20 @@ class _UserpreferencePageState extends State<UserpreferencePage> {
                     width: 175,
                     child: FilledButton(
                       style: FilledButton.styleFrom(
-                        backgroundColor: isPressed
+                        backgroundColor: var1
                             ? Colors.white
                             : Colors.white30,
                       ),
                       onPressed: () {
                         setState(() {
-                          isPressed = !isPressed;
+                          var1 = !var1;
                         });
                       }, //onPressed
 
                       child: Text(
                         'Hard Times',
                         style: TextStyle(
-                          color: isPressed ? Colors.black : Colors.white,
+                          color: var1 ? Colors.black : Colors.white,
                         ),
                       ),
                     ),
@@ -85,25 +95,24 @@ class _UserpreferencePageState extends State<UserpreferencePage> {
                     width: 175,
                     child: FilledButton(
                       style: FilledButton.styleFrom(
-                        backgroundColor: isPressed
+                        backgroundColor: var2
                             ? Colors.white
                             : Colors.white30,
                       ),
                       onPressed: () {
                         setState(() {
-                          isPressed = !isPressed;
+                          var2 = !var2;
                         });
                       }, //onPressed
 
                       child: Text(
-                        'Hard Times',
+                        'Working Out',
                         style: TextStyle(
-                          color: isPressed ? Colors.black : Colors.white,
+                          color: var2 ? Colors.black : Colors.white,
                         ),
                       ),
                     ),
                   ),
-
                 ], //Children
               ),
 
@@ -118,20 +127,20 @@ class _UserpreferencePageState extends State<UserpreferencePage> {
                     width: 175,
                     child: FilledButton(
                       style: FilledButton.styleFrom(
-                        backgroundColor: isPressed
+                        backgroundColor: var3
                             ? Colors.white
                             : Colors.white30,
                       ),
                       onPressed: () {
                         setState(() {
-                          isPressed = !isPressed;
+                          var3 = !var3;
                         });
                       }, //onPressed
 
                       child: Text(
-                        'Hard Times',
+                        'Productivity',
                         style: TextStyle(
-                          color: isPressed ? Colors.black : Colors.white,
+                          color: var3 ? Colors.black : Colors.white,
                         ),
                       ),
                     ),
@@ -142,25 +151,24 @@ class _UserpreferencePageState extends State<UserpreferencePage> {
                     width: 175,
                     child: FilledButton(
                       style: FilledButton.styleFrom(
-                        backgroundColor: isPressed
+                        backgroundColor: var4
                             ? Colors.white
                             : Colors.white30,
                       ),
                       onPressed: () {
                         setState(() {
-                          isPressed = !isPressed;
+                          var4 = !var4;
                         });
                       }, //onPressed
 
                       child: Text(
-                        'Hard Times',
+                        'Self-esteem',
                         style: TextStyle(
-                          color: isPressed ? Colors.black : Colors.white,
+                          color: var4 ? Colors.black : Colors.white,
                         ),
                       ),
                     ),
                   ),
-
                 ],
               ),
 
@@ -175,20 +183,20 @@ class _UserpreferencePageState extends State<UserpreferencePage> {
                     width: 175,
                     child: FilledButton(
                       style: FilledButton.styleFrom(
-                        backgroundColor: isPressed
+                        backgroundColor: var5
                             ? Colors.white
                             : Colors.white30,
                       ),
                       onPressed: () {
                         setState(() {
-                          isPressed = !isPressed;
+                          var5 = !var5;
                         });
                       }, //onPressed
 
                       child: Text(
-                        'Hard Times',
+                        'Achieving goals',
                         style: TextStyle(
-                          color: isPressed ? Colors.black : Colors.white,
+                          color: var5 ? Colors.black : Colors.white,
                         ),
                       ),
                     ),
@@ -199,25 +207,24 @@ class _UserpreferencePageState extends State<UserpreferencePage> {
                     width: 175,
                     child: FilledButton(
                       style: FilledButton.styleFrom(
-                        backgroundColor: isPressed
+                        backgroundColor: var6
                             ? Colors.white
                             : Colors.white30,
                       ),
                       onPressed: () {
                         setState(() {
-                          isPressed = !isPressed;
+                          var6 = !var6;
                         });
                       }, //onPressed
 
                       child: Text(
-                        'Hard Times',
+                        'Inspiration',
                         style: TextStyle(
-                          color: isPressed ? Colors.black : Colors.white,
+                          color: var6 ? Colors.black : Colors.white,
                         ),
                       ),
                     ),
                   ),
-
                 ],
               ),
 
@@ -232,31 +239,140 @@ class _UserpreferencePageState extends State<UserpreferencePage> {
                     width: 175,
                     child: FilledButton(
                       style: FilledButton.styleFrom(
-                        backgroundColor: isPressed
+                        backgroundColor: var7
                             ? Colors.white
                             : Colors.white30,
                       ),
                       onPressed: () {
                         setState(() {
-                          isPressed = !isPressed;
+                          var7 = !var7;
                         });
                       }, //onPressed
 
                       child: Text(
-                        'Hard Times',
+                        'Letting Go',
                         style: TextStyle(
-                          color: isPressed ? Colors.black : Colors.white,
+                          color: var7 ? Colors.black : Colors.white,
                         ),
                       ),
                     ),
+                  ),
 
+                  SizedBox(
+                    height: 50,
+                    width: 175,
+                    child: FilledButton(
+                      style: FilledButton.styleFrom(
+                        backgroundColor: var8
+                            ? Colors.white
+                            : Colors.white30,
+                      ),
+                      onPressed: () {
+                        setState(() {
+                          var8 = !var8;
+                        });
+                      }, //onPressed
+
+                      child: Text(
+                        'Love',
+                        style: TextStyle(
+                          color: var8 ? Colors.black : Colors.white,
+                        ),
+                      ),
+                    ),
                   ),
                 ], //Children
-
               ),
+
+              const SizedBox(height: 15),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                spacing: 15.0,
+                children: [
+                  SizedBox(
+                    height: 50,
+                    width: 175,
+                    child: FilledButton(
+                      style: FilledButton.styleFrom(
+                        backgroundColor: var9
+                            ? Colors.white
+                            : Colors.white30,
+                      ),
+                      onPressed: () {
+                        setState(() {
+                          var9 = !var9;
+                        });
+                      }, //onPressed
+
+                      child: Text(
+                        'Relationship',
+                        style: TextStyle(
+                          color: var9 ? Colors.black : Colors.white,
+                        ),
+                      ),
+                    ),
+                  ),
+
+                  SizedBox(
+                    height: 50,
+                    width: 175,
+                    child: FilledButton(
+                      style: FilledButton.styleFrom(
+                        backgroundColor: var10
+                            ? Colors.white
+                            : Colors.white30,
+                      ),
+                      onPressed: () {
+                        setState(() {
+                          var10 = !var10;
+                        });
+                      }, //onPressed
+
+                      child: Text(
+                        'Faith Spirituality',
+                        style: TextStyle(
+                          color: var10 ? Colors.black : Colors.white,
+                        ),
+                      ),
+                    ),
+                  ),
+                ], //Children
+              ),
+
+              TextButton(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => DashboardPage()),
+                  );
+                },
+                child: Text(
+                  'Continue',
+                  style: TextStyle(
+                    fontSize: 15,
+                    color: Colors.white,
+                    decoration: TextDecoration.underline,
+                  ),
+                ),
+              ),
+
+              /*SizedBox(
+                child: FilledButton(
+                  onPressed: (){
+                    Navigator.push(context,
+                        MaterialPageRoute(
+                            builder: (context) ==>h
+                    ),
+                    );
+                  },
+                )
+              )*/
+
+
             ], //Children
           ),
-        ],//Children
+        ], //Children
       ),
     );
   }
