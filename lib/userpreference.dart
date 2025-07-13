@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hugeicons/hugeicons.dart';
-import 'package:wellness_app/dashboard.dart';
+import 'package:wellness_app/features/dashboard/dashboard.dart';
 
 class UserpreferencePage extends StatefulWidget {
   const UserpreferencePage({super.key});
@@ -344,7 +344,8 @@ class _UserpreferencePageState extends State<UserpreferencePage> {
                 onPressed: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => DashboardPage()),
+                    MaterialPageRoute(builder: (context) => DashboardPage()
+                    ),
                   );
                 },
                 child: Text(

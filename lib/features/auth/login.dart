@@ -1,7 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:hugeicons/hugeicons.dart';
-import 'package:wellness_app/dashboard.dart';
+import 'package:wellness_app/features/dashboard/dashboard.dart';
 import 'package:wellness_app/signup.dart';
+import 'package:wellness_app/features/auth/authservice.dart';
+import 'dart:developer'; // for log() function
+import 'package:firebase_auth/firebase_auth.dart'; // UserCredential, GoogleAuthProvider, FirebaseAuth
+import 'package:google_sign_in/google_sign_in.dart';
+import 'package:wellness_app/core/route/route_name.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -113,11 +118,12 @@ class _LoginPageState extends State<LoginPage> {
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => DashboardPage()),
+                  MaterialPageRoute(builder: (context) => DashboardPage()
+                  ),
                 );
               },
               child: const Text('Login',
-              style: TextStyle(color: Colors.black),),
+                style: TextStyle(color: Colors.black),),
             ),
           ),
           //const SizedBox(height: 30),
@@ -148,7 +154,18 @@ class _LoginPageState extends State<LoginPage> {
               style: const ButtonStyle(
                 backgroundColor: WidgetStatePropertyAll(Colors.white),
               ),
-              onPressed: () {},
+              onPressed: () async {
+                UserCredential? user = await AuthService().signInWithGoogle();
+                if (user != null) {
+                  log("Login success");
+                  Navigator.of(
+                    context,
+                  ).pushNamed(AuthRouteName.dashboardScreen);
+                } else {
+                  log("Login failed");
+                };
+              },
+
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -171,7 +188,7 @@ class _LoginPageState extends State<LoginPage> {
           SizedBox(height: 0.5),*/
 
           Text("Don't have an account?",
-          style: TextStyle(fontSize: 16)),
+              style: TextStyle(fontSize: 16)),
           // Alternative: Using TextButton
           TextButton(
             onPressed: () {
@@ -182,7 +199,10 @@ class _LoginPageState extends State<LoginPage> {
             },
             child: Text(
               'Sign Up',
-              style: TextStyle(fontSize: 15, color: Colors.white, fontWeight: FontWeight.normal,decoration: TextDecoration.underline),
+              style: TextStyle(fontSize: 15,
+                  color: Colors.white,
+                  fontWeight: FontWeight.normal,
+                  decoration: TextDecoration.underline),
             ),
           ),
 

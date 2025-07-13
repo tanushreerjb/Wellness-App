@@ -3,6 +3,7 @@ import 'package:wellness_app/profile.dart';
 import 'package:wellness_app/quote.dart';
 
 class DashboardPage extends StatefulWidget {
+  //final DashboardViewModel dashboardViewModel;
   const DashboardPage({super.key});
 
   @override

@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:wellness_app/login.dart';
+import 'package:wellness_app/features/auth/login.dart';
 import 'package:wellness_app/signup.dart';
 import 'package:wellness_app/userpreference.dart';
-import 'package:wellness_app/dashboard.dart';
+import 'package:wellness_app/features/dashboard/dashboard.dart';
 import 'package:wellness_app/profile.dart';
 import 'package:wellness_app/quote.dart';
+import 'package:wellness_app/core/route/route_name.dart';
+import 'package:wellness_app/core/route/route_config.dart';
+import 'package:wellness_app/features/auth/login.dart';
 
 void main() {
   runApp(const WellnessApp());
@@ -62,12 +65,14 @@ class WellnessApp extends StatelessWidget {
         hoverColor: Colors.transparent,
       ),
 
-      home: const LoginPage(),
+      //home: const LoginPage(),
       // home: const SignupPage(),
       // home: const UserpreferencePage(),
       // home: const DashboardPage(),
       // home: const ProfilePage(),
       // home: const QuotePage(),
+      onGenerateRoute: RouteConfig.generateRoute,
+      initialRoute: RoutesName.defaultScreen,
     );
   }
 }

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hugeicons/hugeicons.dart';
-import 'package:wellness_app/login.dart';
+import 'package:wellness_app/features/auth/login.dart';
 import 'package:wellness_app/userpreference.dart';
 
 class SignupPage extends StatefulWidget {
