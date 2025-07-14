@@ -1,25 +1,19 @@
 import 'package:flutter/material.dart';
 
-import 'core/route/route_name.dart';
-
-class AddQuote extends StatefulWidget {
-  const AddQuote({super.key});
+class HealthTips extends StatefulWidget {
+  const HealthTips({super.key});
 
   @override
-  State<AddQuote> createState() => _AddQuoteState();
+  State<HealthTips> createState() => _HealthTipsState();
 }
 
-class _AddQuoteState extends State<AddQuote> {
-  bool isChecked = false;
+class _HealthTipsState extends State<HealthTips> {
   String? selectedCategory;
 
   final List<String> categories = [
-    'Quotes',
-    'Motivational',
-    'Inspirational',
-    'Life',
-    'Success',
-    'Wisdom',
+    'Health',
+    'Fitness',
+    'Motivation',
   ];
 
   @override
@@ -41,7 +35,7 @@ class _AddQuoteState extends State<AddQuote> {
       appBar: AppBar(
         backgroundColor: Colors.black,
         title: const Text(
-          'Add Quote',
+          'Add Health Tips',
           style: TextStyle(
             fontFamily: 'Poppins',
             fontWeight: FontWeight.bold,
@@ -56,20 +50,20 @@ class _AddQuoteState extends State<AddQuote> {
 
         child: Column(
           spacing: 20,
-          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.start,
 
           children: [
             Column(
+              spacing: 15,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text('Select Category',
-          style: TextStyle(
-            color: Colors.white,
-            fontSize: 18,
-            fontWeight: FontWeight.w500,
-          ),
-        ),
-        SizedBox(height: 15),
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 18,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
 
                 Container(
                   /*decoration: BoxDecoration(
@@ -116,26 +110,8 @@ class _AddQuoteState extends State<AddQuote> {
                   ),
                 ),
 
-                SizedBox(height: 15),
 
-                Text(
-                  'Author Name',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 18,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-                SizedBox(height: 15),
-
-                TextField(
-                  decoration: InputDecoration(
-                    hintText: 'Author Name',
-                  ),
-                ),
-                SizedBox(height: 15),
-                Text(
-                  'Quote',
+                Text('Health Tips',
                   style: TextStyle(
                     color: Colors.white,
                     fontSize: 18,
@@ -143,40 +119,20 @@ class _AddQuoteState extends State<AddQuote> {
                   ),
                 ),
 
-                SizedBox(height: 15),
                 Container(
                   child:  TextField(
                     maxLines: 10,//increases the height
-                  decoration: InputDecoration(
-                    hintText: 'Write a Quote',
+                    decoration: InputDecoration(
+                      hintText: 'Write a health tip',
+                    ),
                   ),
                 ),
-                ),
               ],
-
-            ),
-
-            SizedBox(height: 100),
-            SizedBox(
-              height: 50,
-              width: 500,
-              child: FilledButton(
-                onPressed: () {
-                  Navigator.of(context).pushNamed(AuthRouteName.healthTipsScreen);
-                },
-                style: const ButtonStyle(
-                  backgroundColor: WidgetStatePropertyAll(Colors.grey),
-                ),
-                child: Text(
-                  'Save',
-                  style: TextStyle(fontSize: 15, color: Colors.white),
-                ),
-              ),
-            ),
+            )
 
           ],
-
         ),
+
       ),
     );
   }

@@ -1,7 +1,14 @@
+import 'dart:developer';
+
+import 'package:email_validator/email_validator.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:hugeicons/hugeicons.dart';
 import 'package:wellness_app/features/auth/login.dart';
 import 'package:wellness_app/user_preference.dart';
+import 'package:wellness_app/features/auth/authservice.dart';
+
+import '../../core/route/route_name.dart';
 
 class SignupPage extends StatefulWidget {
   const SignupPage({super.key});
@@ -12,6 +19,47 @@ class SignupPage extends StatefulWidget {
 
 class _SignupPageState extends State<SignupPage> {
   bool isChecked = false;
+  final usernameController = TextEditingController();
+  final emailController = TextEditingController();
+  final passwordController = TextEditingController();
+
+
+  // Simple email validation using email_validator package
+  String? validateEmail(String? value) {
+    if (value == null || value.isEmpty) {
+      return 'Please enter your email';
+    }
+
+    if (!EmailValidator.validate(value)) {
+      return 'Please enter a valid email address';
+    }
+
+    return null;
+  }
+
+  // Simple password validation
+  String? validatePassword(String? value) {
+    if (value == null || value.isEmpty) {
+      return 'Please enter your password';
+    }
+
+    if (value.length < 8) {
+      return 'Password must be at least 8 characters';
+    }
+
+    return null;
+  }
+
+  // Show error message
+  void showMessage(String message, {bool isError = true}) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(message),
+        backgroundColor: isError ? Colors.red : Colors.green,
+        duration: Duration(seconds: 3),
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -51,6 +99,7 @@ class _SignupPageState extends State<SignupPage> {
           SizedBox(
             width: 370.0,
             child: TextField(
+              controller: usernameController,
               decoration: InputDecoration(
                 hintText: 'Enter your Username',
                 prefixIcon: Icon(
@@ -65,6 +114,7 @@ class _SignupPageState extends State<SignupPage> {
           SizedBox(
             width: 370.0,
             child: TextField(
+              controller: emailController,
               decoration: InputDecoration(
                 hintText: 'Enter your Email',
                 prefixIcon: Icon(
@@ -79,6 +129,7 @@ class _SignupPageState extends State<SignupPage> {
           SizedBox(
             width: 370.0,
             child: TextField(
+              controller: passwordController,
               decoration: InputDecoration(
                 hintText: 'Enter your password',
                 prefixIcon: Icon(
@@ -122,11 +173,31 @@ class _SignupPageState extends State<SignupPage> {
               style: const ButtonStyle(
                 backgroundColor: WidgetStatePropertyAll(Colors.white),
               ),
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => UserpreferencePage()),
-                );
+              onPressed: () async {
+                // Validate email
+                String? emailError = validateEmail(emailController.text);
+                if (emailError != null) {
+                  showMessage(emailError);
+                  return;
+                }
+
+                // Validate password
+                String? passwordError = validatePassword(passwordController.text);
+                if (passwordError != null) {
+                  showMessage(passwordError);
+                  return;
+                }
+
+                UserCredential? user = await AuthService().signUpWithEmailPassword(emailController.text, passwordController.text, usernameController.text);
+                if (user != null) {
+                  log("Signup success");
+                  Navigator.of(
+                    context,
+                  ).pushNamed(AuthRouteName.dashboardScreen);
+                } else {
+                  log("Signup failed");
+                  showMessage('Signup Failed');
+                };
               },
               child: const Text('Signup'),
             ),

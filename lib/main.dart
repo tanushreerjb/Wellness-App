@@ -1,3 +1,4 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:wellness_app/features/auth/login.dart';
 import 'package:wellness_app/features/auth/signup.dart';
@@ -10,8 +11,14 @@ import 'package:wellness_app/core/route/route_name.dart';
 import 'package:wellness_app/core/route/route_config.dart';
 import 'package:wellness_app/features/auth/login.dart';
 import 'package:wellness_app/add_quote.dart';
+import 'package:wellness_app/dashboard2.dart';
+//import 'firebase_options.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  await Firebase.initializeApp();
+
   runApp(const WellnessApp());
 }
 

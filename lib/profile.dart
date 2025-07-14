@@ -175,7 +175,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 ),
               ),
               onPressed: () async {
-                await AuthService().googleSignOut();
+                await AuthService().signOut();
                 Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) => LoginPage()),

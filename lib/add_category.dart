@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:dotted_border/dotted_border.dart';
 
+import 'core/route/route_name.dart';
+
 class AddCategory extends StatefulWidget {
   const AddCategory({super.key});
 
@@ -28,6 +30,19 @@ class _AddCategoryState extends State<AddCategory> {
 
     return Scaffold(
       backgroundColor: Colors.black,
+      appBar: AppBar(
+        backgroundColor: Colors.black,
+        title: const Text(
+          'Add Category',
+          style: TextStyle(
+            fontFamily: 'Poppins',
+            fontWeight: FontWeight.bold,
+            color: Colors.white,
+          ),
+        ),
+        //automaticallyImplyLeading: false,
+
+      ),
       body: Padding(
         padding: const EdgeInsets.all(25.0),
         child: Column(
@@ -49,11 +64,6 @@ class _AddCategoryState extends State<AddCategory> {
                 TextField(
                   decoration: InputDecoration(
                     hintText: 'Category Name',
-                    prefixIcon: Icon(
-                      Icons.password_outlined,
-                      size: 24.0,
-                      color: Colors.white70,
-                    ),
                   ),
                 ),
               ],
@@ -249,7 +259,9 @@ class _AddCategoryState extends State<AddCategory> {
               height: 50,
               width: 500,
               child: FilledButton(
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.of(context).pushNamed(AuthRouteName.addQuoteScreen);
+                },
                 style: const ButtonStyle(
                   backgroundColor: WidgetStatePropertyAll(Colors.grey),
                 ),
