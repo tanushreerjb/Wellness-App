@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hugeicons/hugeicons.dart';
 import 'package:wellness_app/features/dashboard/dashboard.dart';
-import 'package:wellness_app/signup.dart';
+import 'package:wellness_app/features/auth/signup.dart';
 import 'package:wellness_app/features/auth/authservice.dart';
 import 'dart:developer'; // for log() function
 import 'package:firebase_auth/firebase_auth.dart'; // UserCredential, GoogleAuthProvider, FirebaseAuth

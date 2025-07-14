@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:wellness_app/add_category.dart';
 import 'package:wellness_app/core/route/route_name.dart';
 import 'package:wellness_app/features/auth/login.dart';
 import 'package:wellness_app/features/dashboard/dashboard.dart';
@@ -19,7 +20,7 @@ class RouteConfig {
 
       case RoutesName.defaultScreen:
       default:
-        return MaterialPageRoute(builder: (_) => LoginPage());
+        return MaterialPageRoute(builder: (_) => AddCategory()); //change this to login page later !!
     }
   }
 }

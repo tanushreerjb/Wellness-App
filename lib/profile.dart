@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:hugeicons/hugeicons.dart';
 import 'package:wellness_app/features/auth/authservice.dart';
 import 'package:wellness_app/features/auth/login.dart';
-import 'package:wellness_app/signup.dart';
+import 'package:wellness_app/features/auth/signup.dart';
 import 'package:wellness_app/features/auth/authservice.dart';
 
 class ProfilePage extends StatefulWidget {
