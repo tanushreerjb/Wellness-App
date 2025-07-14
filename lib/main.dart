@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:wellness_app/features/auth/login.dart';
 import 'package:wellness_app/features/auth/signup.dart';
-import 'package:wellness_app/userpreference.dart';
+import 'package:wellness_app/user_preference.dart';
 import 'package:wellness_app/features/dashboard/dashboard.dart';
 import 'package:wellness_app/profile.dart';
 import 'package:wellness_app/quote.dart';
@@ -9,6 +9,7 @@ import 'package:wellness_app/add_category.dart';
 import 'package:wellness_app/core/route/route_name.dart';
 import 'package:wellness_app/core/route/route_config.dart';
 import 'package:wellness_app/features/auth/login.dart';
+import 'package:wellness_app/add_quote.dart';
 
 void main() {
   runApp(const WellnessApp());
