@@ -7,8 +7,10 @@ import 'package:hugeicons/hugeicons.dart';
 import 'package:wellness_app/features/auth/login.dart';
 import 'package:wellness_app/user_preference.dart';
 import 'package:wellness_app/features/auth/authservice.dart';
+import 'package:uuid/uuid.dart';
 
 import '../../core/route/route_name.dart';
+import '../service/firestore_service.dart';
 
 class SignupPage extends StatefulWidget {
   const SignupPage({super.key});
@@ -189,7 +191,12 @@ class _SignupPageState extends State<SignupPage> {
                 }
 
                 UserCredential? user = await AuthService().signUpWithEmailPassword(emailController.text, passwordController.text, usernameController.text);
-                if (user != null) {
+                if (user!= null) {
+                  FireStoreService().insertNewUserData(//stores data in db (firestore)
+                    email: user.user?.email??'',
+                    name: user.user?.email??'',
+                    uuid: user.user?.uid??'',
+                  );
                   log("Signup success");
                   Navigator.of(
                     context,
