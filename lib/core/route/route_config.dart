@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:wellness_app/add_category.dart';
 import 'package:wellness_app/add_quote.dart';
-import 'package:wellness_app/dashboard2.dart';
+import 'package:wellness_app/features/dashboard/admin_dashboard.dart';
 import 'package:wellness_app/health_tips.dart';
 import 'package:wellness_app/core/route/route_name.dart';
 import 'package:wellness_app/features/auth/login.dart';
@@ -39,11 +39,17 @@ class RouteConfig {
                 HealthTips()
         );
 
+      case AuthRouteName.adminDashboardScreen:
+        return MaterialPageRoute(
+            builder: (_) =>
+                AdminDashboard()
+        );
+
 
 
       case RoutesName.defaultScreen:
       default:
-        return MaterialPageRoute(builder: (_) => LoginPage()); //change this to login page later !!
+        return MaterialPageRoute(builder: (_) => AdminDashboard()); //change this to login page later !!
     }
   }
 }

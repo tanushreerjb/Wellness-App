@@ -260,7 +260,7 @@ class _AddCategoryState extends State<AddCategory> {
               width: 500,
               child: FilledButton(
                 onPressed: () {
-                  Navigator.of(context).pushNamed(AuthRouteName.addQuoteScreen);
+                  Navigator.of(context).pushNamed(AuthRouteName.adminDashboardScreen);
                 },
                 style: const ButtonStyle(
                   backgroundColor: WidgetStatePropertyAll(Colors.grey),

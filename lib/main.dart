@@ -11,7 +11,7 @@ import 'package:wellness_app/core/route/route_name.dart';
 import 'package:wellness_app/core/route/route_config.dart';
 import 'package:wellness_app/features/auth/login.dart';
 import 'package:wellness_app/add_quote.dart';
-import 'package:wellness_app/dashboard2.dart';
+import 'package:wellness_app/features/dashboard/admin_dashboard.dart';
 //import 'firebase_options.dart';
 
 void main() async {

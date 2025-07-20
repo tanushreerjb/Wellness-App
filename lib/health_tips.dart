@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'core/route/route_name.dart';
+
 class HealthTips extends StatefulWidget {
   const HealthTips({super.key});
 
@@ -128,10 +130,30 @@ class _HealthTipsState extends State<HealthTips> {
                   ),
                 ),
               ],
-            )
+            ),
+
+            SizedBox(height: 250),
+            SizedBox(
+              height: 50,
+              width: 500,
+              child: FilledButton(
+                onPressed: () {
+                  Navigator.of(context).pushNamed(AuthRouteName.adminDashboardScreen);
+                },
+                style: const ButtonStyle(
+                  backgroundColor: WidgetStatePropertyAll(Colors.grey),
+                ),
+                child: Text(
+                  'Save',
+                  style: TextStyle(fontSize: 15, color: Colors.white),
+                ),
+              ),
+            ),
 
           ],
         ),
+
+
 
       ),
     );

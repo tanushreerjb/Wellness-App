@@ -49,8 +49,8 @@ class _AddQuoteState extends State<AddQuote> {
           ),
         ),
         //automaticallyImplyLeading: false,
-
       ),
+
       body: Padding(
         padding: const EdgeInsets.all(25.0),
 
@@ -162,7 +162,7 @@ class _AddQuoteState extends State<AddQuote> {
               width: 500,
               child: FilledButton(
                 onPressed: () {
-                  Navigator.of(context).pushNamed(AuthRouteName.healthTipsScreen);
+                  Navigator.of(context).pushNamed(AuthRouteName.adminDashboardScreen);
                 },
                 style: const ButtonStyle(
                   backgroundColor: WidgetStatePropertyAll(Colors.grey),
