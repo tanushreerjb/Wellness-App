@@ -1,4 +1,6 @@
+import 'dart:async';
 import 'dart:developer';
+import 'dart:io';
 
 import 'package:email_validator/email_validator.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -20,6 +22,7 @@ class SignupPage extends StatefulWidget {
 }
 
 class _SignupPageState extends State<SignupPage> {
+  bool isLoading = false;
   bool isChecked = false;
   final usernameController = TextEditingController();
   final emailController = TextEditingController();
@@ -65,6 +68,10 @@ class _SignupPageState extends State<SignupPage> {
 
   @override
   Widget build(BuildContext context) {
+    if (isLoading) {
+      return Center(child: CircularProgressIndicator());
+    }
+
     Color getColor(Set<WidgetState> states) {
       const Set<WidgetState> interactiveStates = <WidgetState>{
         WidgetState.pressed,
@@ -190,21 +197,44 @@ class _SignupPageState extends State<SignupPage> {
                   return;
                 }
 
-                UserCredential? user = await AuthService().signUpWithEmailPassword(emailController.text, passwordController.text, usernameController.text);
-                if (user!= null) {
-                  FireStoreService().insertNewUserData(//stores data in db (firestore)
-                    email: user.user?.email??'',
-                    name: user.user?.email??'',
-                    uuid: user.user?.uid??'',
-                  );
-                  log("Signup success");
-                  Navigator.of(
-                    context,
-                  ).pushNamed(AuthRouteName.dashboardScreen);
-                } else {
-                  log("Signup failed");
-                  showMessage('Signup Failed');
-                };
+                setState(() {
+                  isLoading = true;
+                });
+
+                try {
+                  UserCredential? user = await AuthService().signUpWithEmailPassword(emailController.text, passwordController.text, usernameController.text);
+                  if (user!= null) {
+                    FireStoreService().insertNewUserData(//stores data in db (firestore)
+                      email: user.user?.email??'',
+                      name: user.user?.email??'',
+                      uuid: user.user?.uid??'',
+                    );
+                    log("Signup success");
+                    Navigator.of(
+                      context,
+                    ).pushNamed(AuthRouteName.userPreferenceScreen);
+                  } else {
+                    log("Signup failed");
+                    showMessage('Signup Failed');
+                  }
+                } catch (e) {
+                  if (e is SocketException) {
+                    print('No Internet Connection. Please try again later.');
+                  }
+                  else if (e is TimeoutException) {
+                    print('Request timed out. Please try again later.');
+                  }
+                  else {
+                    print('An unknown error occurred');
+                  }
+                }
+                finally {
+                  if (mounted) {
+                    setState(() {
+                      isLoading = false;
+                    });
+                  }
+                }
               },
               child: const Text('Signup'),
             ),

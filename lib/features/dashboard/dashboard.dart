@@ -39,7 +39,7 @@ class _DashboardPageState extends State<DashboardPage> {
             color: Colors.white,
           ),
         ),
-        automaticallyImplyLeading: false,
+        //automaticallyImplyLeading: false,
         actions: [
           RawMaterialButton(
             child: CircleAvatar(

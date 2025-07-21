@@ -6,6 +6,7 @@ import 'package:wellness_app/health_tips.dart';
 import 'package:wellness_app/core/route/route_name.dart';
 import 'package:wellness_app/features/auth/login.dart';
 import 'package:wellness_app/features/dashboard/dashboard.dart';
+import 'package:wellness_app/user_preference.dart';
 
 class RouteConfig {
   RouteConfig._();
@@ -45,11 +46,17 @@ class RouteConfig {
                 AdminDashboard()
         );
 
+      case AuthRouteName.userPreferenceScreen:
+        return MaterialPageRoute(
+            builder: (_) =>
+                UserpreferencePage()
+        );
+
 
 
       case RoutesName.defaultScreen:
       default:
-        return MaterialPageRoute(builder: (_) => AdminDashboard()); //change this to login page later !!
+        return MaterialPageRoute(builder: (_) => LoginPage()); //change this to login page later !!
     }
   }
 }

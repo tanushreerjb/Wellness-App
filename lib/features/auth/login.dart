@@ -9,6 +9,8 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:wellness_app/core/route/route_name.dart';
 import 'package:email_validator/email_validator.dart';
 
+import '../service/firestore_service.dart';
+
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
 
@@ -18,6 +20,7 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   bool isChecked = false;
+  String role = 'customer';
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
   //final _formKey = GlobalKey<FormState>();
@@ -93,7 +96,7 @@ class _LoginPageState extends State<LoginPage> {
                 ),
               ),
             ),
-        
+
             SizedBox(
               width: 370.0,
               child: TextField(
@@ -108,7 +111,7 @@ class _LoginPageState extends State<LoginPage> {
                 ),
               ),
             ),
-        
+
             SizedBox(
               width: 370.0,
               child: TextField(
@@ -123,7 +126,7 @@ class _LoginPageState extends State<LoginPage> {
                 ),
               ),
             ),
-        
+
             Row(
               children: [
                 SizedBox(
@@ -143,11 +146,11 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                   ),
                 ),
-        
+
                 Text('Remember Me'),
-        
+
                 const SizedBox(width: 95), //Adding space between the row elements
-        
+
                 TextButton(
                   onPressed: () async {
                     bool linksent = await AuthService().forgotPassword(emailController.text);
@@ -169,7 +172,7 @@ class _LoginPageState extends State<LoginPage> {
                         decoration: TextDecoration.underline),
                   ),
                 ),
-        
+
               ], //Row children
             ),
             SizedBox(
@@ -203,7 +206,26 @@ class _LoginPageState extends State<LoginPage> {
                   if (user != null) {
                     log("Login success");
                     //showMessage('Login Successful', isError: false);
-                    Navigator.of(context).pushNamed(AuthRouteName.dashboardScreen);
+                    String userId = user.user!.uid; // Get the user's UID
+                    String? userRole = await FireStoreService().getUserRole(userId);
+
+                    if (userRole != null) {
+                      log("User role: $userRole");
+
+                      // Navigate based on role
+                      if (userRole == 'admin') {
+                        Navigator.of(context).pushNamed(AuthRouteName.adminDashboardScreen);
+                      } else if (userRole == 'customer') {
+                        Navigator.of(context).pushNamed(AuthRouteName.dashboardScreen);
+                      } else {
+                        // Handle unknown role
+                        showMessage("Unknown user role");
+                      }
+                    } else {
+                      log("Failed to retrieve user role");
+                      showMessage("Failed to retrieve user information");
+                    }
+
                   } else {
                     log("Login failed");
                     //showMessage('Invalid Credentials');
@@ -216,26 +238,9 @@ class _LoginPageState extends State<LoginPage> {
               ),
             ),
             //const SizedBox(height: 30),
-        
+
             Text('or'),
-        
-            // SizedBox(
-            //   height: 60.0,
-            //   width: 360.0,
-            //   child: FilledButton(
-            //     prefixIcon: Icon(
-            //       Icons.email_outlined,
-            //       size: 24.0,
-            //       color: Colors.white70,
-            //     ),
-            //     style: const ButtonStyle(
-            //       backgroundColor: WidgetStatePropertyAll(Colors.white),
-            //     ),
-            //     onPressed: () {},
-            //     child: const Text('Login with Google'),
-            //   ),
-            // ),
-        
+
             SizedBox(
               height: 60.0,
               width: 360.0,
@@ -245,16 +250,22 @@ class _LoginPageState extends State<LoginPage> {
                 ),
                 onPressed: () async {
                   UserCredential? user = await AuthService().signInWithGoogle();
-                  if (user != null) {
+                  if (user != null && role == 'customer') {
                     log("Login success");
                     Navigator.of(
                       context,
                     ).pushNamed(AuthRouteName.dashboardScreen);
-                  } else {
+                  } else if (user != null && role == 'admin'){
+                    log("Login success");
+                    Navigator.of(
+                      context,
+                    ).pushNamed(AuthRouteName.adminDashboardScreen);
+                  }
+                  else {
                     log("Login failed");
                   };
                 },
-        
+
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -272,10 +283,10 @@ class _LoginPageState extends State<LoginPage> {
                 ),
               ),
             ),
-        
+
             /*const SizedBox(height: 30),
             SizedBox(height: 0.5),*/
-        
+
             Text("Don't have an account?",
                 style: TextStyle(fontSize: 16)),
             // Alternative: Using TextButton
@@ -294,7 +305,7 @@ class _LoginPageState extends State<LoginPage> {
                     decoration: TextDecoration.underline),
               ),
             ),
-        
+
           ], //Children
         ),
       );

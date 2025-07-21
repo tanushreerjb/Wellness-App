@@ -74,12 +74,6 @@ class WellnessApp extends StatelessWidget {
         hoverColor: Colors.transparent,
       ),
 
-      //home: const LoginPage(),
-      // home: const SignupPage(),
-      // home: const UserpreferencePage(),
-      // home: const DashboardPage(),
-      // home: const ProfilePage(),
-      // home: const QuotePage(),
       onGenerateRoute: RouteConfig.generateRoute,
       initialRoute: RoutesName.defaultScreen,
     );

@@ -1,6 +1,13 @@
+import 'dart:developer';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:hugeicons/hugeicons.dart';
 import 'package:wellness_app/features/dashboard/dashboard.dart';
+
+import 'core/route/route_name.dart';
+import 'package:wellness_app/features/service/firestore_service.dart';
 
 class UserpreferencePage extends StatefulWidget {
   const UserpreferencePage({super.key});
@@ -10,19 +17,73 @@ class UserpreferencePage extends StatefulWidget {
 }
 
 class _UserpreferencePageState extends State<UserpreferencePage> {
+  // List of preference topics
+  bool isLoading = false;
   bool isChecked = false;
-  bool var1 = false;
-  bool var2 = false;
-  bool var3 = false;
-  bool var4 = false;
-  bool var5 = false;
-  bool var6 = false;
-  bool var7 = false;
-  bool var8 = false;
-  bool var9 = false;
-  bool var10 = false;
+
+  List<bool> preferences = List.filled(10, false);
+
+  // Add FireStoreService instance
+  final FireStoreService _fireStoreService = FireStoreService();
+
+  final List<String> topics = [
+    'Hard Times',
+    'Working Out',
+    'Productivity',
+    'Self-esteem',
+    'Achieving goals',
+    'Inspiration',
+    'Letting Go',
+    'Love',
+    'Relationship',
+    'Faith Spirituality',
+  ];
 
   @override
+  void initState() {
+    super.initState();
+  }
+
+  Future<void> _savePreferencesToFirebase() async {
+    setState(() {
+      isLoading = true;
+    });
+
+    try {
+      final user = FirebaseAuth.instance.currentUser;
+      if (user != null) {
+        // Get selected preferences using topics list instead of entry.key
+        List<String> selectedPreferences = [];
+        for (int i = 0; i < preferences.length; i++) {
+          if (preferences[i]) {
+            selectedPreferences.add(topics[i]);
+          }
+        }
+
+        // Use FireStoreService instead of direct Firestore call
+        await _fireStoreService.updateUserPreferences(
+          uuid: user.uid,
+          preferences: selectedPreferences,
+        );
+
+        // Navigate to dashboard
+        Navigator.of(context).pushNamed(AuthRouteName.dashboardScreen);
+      }
+    } catch (e) {
+      log("Failed to save preferences: $e");
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Failed to save preferences. Please try again.'),
+          backgroundColor: Colors.red,
+        ),
+      );
+    } finally {
+      setState(() {
+        isLoading = false;
+      });
+    }
+  }
+
   Widget build(BuildContext context) {
     Color getColor(Set<WidgetState> states) {
       const Set<WidgetState> interactiveStates = <WidgetState>{
@@ -38,10 +99,23 @@ class _UserpreferencePageState extends State<UserpreferencePage> {
 
     return Scaffold(
       backgroundColor: Colors.black,
+      appBar: AppBar(
+        backgroundColor: Colors.black,
+        title: const Text(
+          '',
+          style: TextStyle(
+            fontFamily: 'Poppins',
+            fontWeight: FontWeight.bold,
+            color: Colors.white,
+          ),
+        ),
+        //automaticallyImplyLeading: false,
+
+      ),
       body: Column(
-        spacing: 30, //equal spacing of 10
+        spacing: 80, //equal spacing of 10
         crossAxisAlignment: CrossAxisAlignment.center,
-        mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.start,
 
         children: [
           SizedBox(
@@ -59,7 +133,7 @@ class _UserpreferencePageState extends State<UserpreferencePage> {
           ),
 
           Column(
-            spacing: 12.5,
+            spacing: 13,
             children: [
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -71,20 +145,20 @@ class _UserpreferencePageState extends State<UserpreferencePage> {
                     width: 175,
                     child: FilledButton(
                       style: FilledButton.styleFrom(
-                        backgroundColor: var1
+                        backgroundColor: preferences[0]
                             ? Colors.white
                             : Colors.white30,
                       ),
                       onPressed: () {
                         setState(() {
-                          var1 = !var1;
+                          preferences[0] = !preferences[0];
                         });
                       }, //onPressed
 
                       child: Text(
                         'Hard Times',
                         style: TextStyle(
-                          color: var1 ? Colors.black : Colors.white,
+                          color: preferences[0] ? Colors.black : Colors.white,
                         ),
                       ),
                     ),
@@ -95,20 +169,20 @@ class _UserpreferencePageState extends State<UserpreferencePage> {
                     width: 175,
                     child: FilledButton(
                       style: FilledButton.styleFrom(
-                        backgroundColor: var2
+                        backgroundColor: preferences[1]
                             ? Colors.white
                             : Colors.white30,
                       ),
                       onPressed: () {
                         setState(() {
-                          var2 = !var2;
+                          preferences[1] = !preferences[1];
                         });
                       }, //onPressed
 
                       child: Text(
                         'Working Out',
                         style: TextStyle(
-                          color: var2 ? Colors.black : Colors.white,
+                          color: preferences[1] ? Colors.black : Colors.white,
                         ),
                       ),
                     ),
@@ -127,20 +201,20 @@ class _UserpreferencePageState extends State<UserpreferencePage> {
                     width: 175,
                     child: FilledButton(
                       style: FilledButton.styleFrom(
-                        backgroundColor: var3
+                        backgroundColor: preferences[2]
                             ? Colors.white
                             : Colors.white30,
                       ),
                       onPressed: () {
                         setState(() {
-                          var3 = !var3;
+                          preferences[2] = !preferences[2];
                         });
                       }, //onPressed
 
                       child: Text(
                         'Productivity',
                         style: TextStyle(
-                          color: var3 ? Colors.black : Colors.white,
+                          color: preferences[2] ? Colors.black : Colors.white,
                         ),
                       ),
                     ),
@@ -151,20 +225,20 @@ class _UserpreferencePageState extends State<UserpreferencePage> {
                     width: 175,
                     child: FilledButton(
                       style: FilledButton.styleFrom(
-                        backgroundColor: var4
+                        backgroundColor: preferences[3]
                             ? Colors.white
                             : Colors.white30,
                       ),
                       onPressed: () {
                         setState(() {
-                          var4 = !var4;
+                          preferences[3] = !preferences[3];
                         });
                       }, //onPressed
 
                       child: Text(
                         'Self-esteem',
                         style: TextStyle(
-                          color: var4 ? Colors.black : Colors.white,
+                          color: preferences[3] ? Colors.black : Colors.white,
                         ),
                       ),
                     ),
@@ -183,20 +257,20 @@ class _UserpreferencePageState extends State<UserpreferencePage> {
                     width: 175,
                     child: FilledButton(
                       style: FilledButton.styleFrom(
-                        backgroundColor: var5
+                        backgroundColor: preferences[4]
                             ? Colors.white
                             : Colors.white30,
                       ),
                       onPressed: () {
                         setState(() {
-                          var5 = !var5;
+                          preferences[4] = !preferences[4];
                         });
                       }, //onPressed
 
                       child: Text(
                         'Achieving goals',
                         style: TextStyle(
-                          color: var5 ? Colors.black : Colors.white,
+                          color: preferences[4] ? Colors.black : Colors.white,
                         ),
                       ),
                     ),
@@ -207,20 +281,20 @@ class _UserpreferencePageState extends State<UserpreferencePage> {
                     width: 175,
                     child: FilledButton(
                       style: FilledButton.styleFrom(
-                        backgroundColor: var6
+                        backgroundColor: preferences[5]
                             ? Colors.white
                             : Colors.white30,
                       ),
                       onPressed: () {
                         setState(() {
-                          var6 = !var6;
+                          preferences[5] = !preferences[5];
                         });
                       }, //onPressed
 
                       child: Text(
                         'Inspiration',
                         style: TextStyle(
-                          color: var6 ? Colors.black : Colors.white,
+                          color: preferences[5] ? Colors.black : Colors.white,
                         ),
                       ),
                     ),
@@ -239,20 +313,20 @@ class _UserpreferencePageState extends State<UserpreferencePage> {
                     width: 175,
                     child: FilledButton(
                       style: FilledButton.styleFrom(
-                        backgroundColor: var7
+                        backgroundColor: preferences[6]
                             ? Colors.white
                             : Colors.white30,
                       ),
                       onPressed: () {
                         setState(() {
-                          var7 = !var7;
+                          preferences[6] = !preferences[6];
                         });
                       }, //onPressed
 
                       child: Text(
                         'Letting Go',
                         style: TextStyle(
-                          color: var7 ? Colors.black : Colors.white,
+                          color: preferences[6] ? Colors.black : Colors.white,
                         ),
                       ),
                     ),
@@ -263,20 +337,20 @@ class _UserpreferencePageState extends State<UserpreferencePage> {
                     width: 175,
                     child: FilledButton(
                       style: FilledButton.styleFrom(
-                        backgroundColor: var8
+                        backgroundColor: preferences[7]
                             ? Colors.white
                             : Colors.white30,
                       ),
                       onPressed: () {
                         setState(() {
-                          var8 = !var8;
+                          preferences[7] = !preferences[7];
                         });
                       }, //onPressed
 
                       child: Text(
                         'Love',
                         style: TextStyle(
-                          color: var8 ? Colors.black : Colors.white,
+                          color: preferences[7] ? Colors.black : Colors.white,
                         ),
                       ),
                     ),
@@ -295,20 +369,20 @@ class _UserpreferencePageState extends State<UserpreferencePage> {
                     width: 175,
                     child: FilledButton(
                       style: FilledButton.styleFrom(
-                        backgroundColor: var9
+                        backgroundColor: preferences[8]
                             ? Colors.white
                             : Colors.white30,
                       ),
                       onPressed: () {
                         setState(() {
-                          var9 = !var9;
+                          preferences[8] = !preferences[8];
                         });
                       }, //onPressed
 
                       child: Text(
                         'Relationship',
                         style: TextStyle(
-                          color: var9 ? Colors.black : Colors.white,
+                          color: preferences[8] ? Colors.black : Colors.white,
                         ),
                       ),
                     ),
@@ -319,59 +393,42 @@ class _UserpreferencePageState extends State<UserpreferencePage> {
                     width: 175,
                     child: FilledButton(
                       style: FilledButton.styleFrom(
-                        backgroundColor: var10
+                        backgroundColor: preferences[9]
                             ? Colors.white
                             : Colors.white30,
                       ),
                       onPressed: () {
                         setState(() {
-                          var10 = !var10;
+                          preferences[9] = !preferences[9];
                         });
                       }, //onPressed
 
                       child: Text(
                         'Faith Spirituality',
                         style: TextStyle(
-                          color: var10 ? Colors.black : Colors.white,
+                          color: preferences[9] ? Colors.black : Colors.white,
                         ),
                       ),
                     ),
                   ),
                 ], //Children
               ),
-
-              TextButton(
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => DashboardPage()
-                    ),
-                  );
-                },
-                child: Text(
-                  'Continue',
-                  style: TextStyle(
-                    fontSize: 15,
-                    color: Colors.white,
-                    decoration: TextDecoration.underline,
-                  ),
-                ),
-              ),
-
-              /*SizedBox(
-                child: FilledButton(
-                  onPressed: (){
-                    Navigator.push(context,
-                        MaterialPageRoute(
-                            builder: (context) ==>h
-                    ),
-                    );
-                  },
-                )
-              )*/
-
-
             ], //Children
+          ),
+
+          //SizedBox(width: 100,),
+          FilledButton(
+            onPressed: isLoading ? null : _savePreferencesToFirebase, // Updated to use the save method
+            child: isLoading
+                ? CircularProgressIndicator(color: Colors.white)
+                : Text(
+              'Continue',
+              style: TextStyle(
+                fontSize: 15,
+                color: Colors.white,
+                decoration: TextDecoration.underline,
+              ),
+            ),
           ),
         ], //Children
       ),
