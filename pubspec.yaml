@@ -47,6 +47,7 @@ dependencies:
   dotted_border: ^2.1.0
   email_validator: ^3.0.0
   cloud_firestore: ^5.6.11
+  show_hide_password: ^0.0.2
 
 dev_dependencies:
   flutter_test:
