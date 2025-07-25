@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:dotted_border/dotted_border.dart';
 
 import 'core/route/route_name.dart';
+import 'features/service/firestore_service.dart';
 
 class AddCategory extends StatefulWidget {
-  const AddCategory({super.key});
+  final String userId;
+  const AddCategory({super.key, required this.userId});
 
   @override
   State<AddCategory> createState() => _AddCategoryState();
@@ -12,9 +14,55 @@ class AddCategory extends StatefulWidget {
 
 class _AddCategoryState extends State<AddCategory> {
   bool isChecked = false;
+  bool isLoading = false;
   String selectedType = 'Quotes';
 
+  final TextEditingController _categoryController = TextEditingController();
+
+
   @override
+  Future<void> _saveCategory() async {
+    // Validate input
+    if (_categoryController.text.trim().isEmpty) {
+      _showSnackBar('Please enter a category name', isError: true);
+      return;
+    }
+    setState(() {
+      isLoading = true;
+    });
+
+    try {
+      // Call the FireStore service to add category
+      bool success = await FireStoreService().addCategory(
+        userId: widget.userId,
+        categoryName: _categoryController.text.trim(),
+      );
+
+      if (success) {
+        _showSnackBar('Category added successfully!');
+        Navigator.of(context).pushNamed(AuthRouteName.adminDashboardScreen);
+      } else {
+        _showSnackBar('Failed to add category. Please try again.', isError: true);
+      }
+    } catch (e) {
+      _showSnackBar('Error: ${e.toString()}', isError: true);
+    } finally {
+      setState(() {
+        isLoading = false;
+      });
+    }
+  }
+
+  void _showSnackBar(String message, {bool isError = false}) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(message),
+        backgroundColor: isError ? Colors.red : Colors.green,
+        duration: Duration(seconds: 3),
+      ),
+    );
+  }
+
   Widget build(BuildContext context) {
     Color getColor(Set<WidgetState> states) {
       const Set<WidgetState> interactiveStates = <WidgetState>{
@@ -62,6 +110,7 @@ class _AddCategoryState extends State<AddCategory> {
                 ),
                 SizedBox(height: 15),
                 TextField(
+                  controller: _categoryController,
                   decoration: InputDecoration(
                     hintText: 'Category Name',
                   ),
@@ -259,9 +308,7 @@ class _AddCategoryState extends State<AddCategory> {
               height: 50,
               width: 500,
               child: FilledButton(
-                onPressed: () {
-                  Navigator.of(context).pushNamed(AuthRouteName.adminDashboardScreen);
-                },
+                onPressed: isLoading ? null: _saveCategory,
                 style: const ButtonStyle(
                   backgroundColor: WidgetStatePropertyAll(Colors.grey),
                 ),

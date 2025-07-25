@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../core/route/route_name.dart';
+import '../service/firestore_service.dart';
 
 class AdminDashboard extends StatefulWidget {
   const AdminDashboard({super.key});
@@ -10,7 +11,39 @@ class AdminDashboard extends StatefulWidget {
 }
 
 class _AdminDashboardState extends State<AdminDashboard> {
+  int totalUsers = 0;
+  int totalCategories = 0;
+  int totalQuotes = 0;
+  int totalHealthTips = 0;
+  bool isLoading = false;
+
   @override
+  void initState(){
+    super.initState();
+    loadDashboardData();
+  }
+
+  Future <void> loadDashboardData() async{
+    try {
+      int userCount = await FireStoreService().getTotalUser(userId: "");
+      int categoryCount = await FireStoreService().getTotalCategory(userId: "");
+      int quoteCount = await FireStoreService().getTotalQuote(userId: "");
+
+      setState(() {
+        totalCategories = categoryCount;
+        totalQuotes = quoteCount;
+        totalUsers = userCount;
+        totalHealthTips = userCount; //change later
+        isLoading = false;
+      });
+    } catch (e) {
+      // handle error if needed
+      setState(() {
+        isLoading = false;
+      });
+    }
+  }
+
   Widget build(BuildContext context) {
     Color getColor(Set<WidgetState> states) {
       const Set<WidgetState> interactiveStates = <WidgetState>{
@@ -68,7 +101,7 @@ class _AdminDashboardState extends State<AdminDashboard> {
                         children: [
                           Text('Total Users'),
                           Text(
-                            '100000',
+                            '$totalUsers',
                             style: TextStyle(
                               fontWeight: FontWeight.bold,
                               fontSize: 25,
@@ -101,7 +134,7 @@ class _AdminDashboardState extends State<AdminDashboard> {
                         children: [
                           Text('Total Category'),
                           Text(
-                            '100',
+                            '$totalCategories',
                             style: TextStyle(
                               fontWeight: FontWeight.bold,
                               fontSize: 25,
@@ -148,7 +181,7 @@ class _AdminDashboardState extends State<AdminDashboard> {
                         children: [
                           Text('Total Quotes'),
                           Text(
-                            '200',
+                            '$totalQuotes',
                             style: TextStyle(
                               fontWeight: FontWeight.bold,
                               fontSize: 25,
@@ -195,7 +228,7 @@ class _AdminDashboardState extends State<AdminDashboard> {
                         children: [
                           Text('Total Health Tips'),
                           Text(
-                            '200',
+                            '$totalHealthTips',
                             style: TextStyle(
                               fontWeight: FontWeight.bold,
                               fontSize: 25,

@@ -142,6 +142,7 @@ class _SignupPageState extends State<SignupPage> {
             ShowHidePassword(
                 passwordField: (bool hidePassword){
                   return  TextField(
+                    controller: passwordController,
                     obscureText: hidePassword, //use the hidePassword status on obscureText to toggle the visibility
                     decoration: InputDecoration(
                       hintText: 'Enter your password',

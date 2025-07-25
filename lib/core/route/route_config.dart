@@ -25,13 +25,13 @@ class RouteConfig {
       case AuthRouteName.addQuoteScreen:
         return MaterialPageRoute(
             builder: (_) =>
-                AddQuote()
+                AddQuote(userId: '',)
         );
 
       case AuthRouteName.addCategoryScreen:
         return MaterialPageRoute(
             builder: (_) =>
-                AddCategory()
+                AddCategory(userId: '',)
         );
 
       case AuthRouteName.healthTipsScreen:
