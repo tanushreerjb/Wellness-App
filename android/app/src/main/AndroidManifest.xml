@@ -1,4 +1,10 @@
-<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+
     <application
         android:label="wellness_app"
         android:name="${applicationName}"
@@ -30,6 +36,44 @@
         <meta-data
             android:name="flutterEmbedding"
             android:value="2" />
+
+        <!-- FCM Service (REQUIRED) -->
+        <service
+            android:name="io.flutter.plugins.firebase.messaging.FlutterFirebaseMessagingService"
+            android:exported="true" tools:replace="android:exported">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
+        <!-- Optional: Receiver for compatibility -->
+        <receiver
+            android:name="com.google.firebase.iid.FirebaseInstanceIdReceiver"
+            android:exported="true"
+            android:permission="com.google.android.c2dm.permission.SEND">
+            <intent-filter>
+                <action android:name="com.google.android.c2dm.intent.RECEIVE" />
+                <category android:name="${applicationId}" />
+            </intent-filter>
+        </receiver>
+
+        <receiver
+            android:name="com.dexterous.flutterlocalnotifications.ScheduledNotificationReceiver"
+            android:exported="false" />
+        <receiver
+            android:name="com.dexterous.flutterlocalnotifications.ScheduledNotificationBootReceiver"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="android.intent.action.MY_PACKAGE_REPLACED" />
+                <action android:name="android.intent.action.QUICKBOOT_POWERON" />
+                <action android:name="com.htc.intent.action.QUICKBOOT_POWERON" />
+            </intent-filter>
+        </receiver>
+        <service
+            android:name="com.dexterous.flutterlocalnotifications.NotificationService"
+            android:exported="true"
+            android:permission="android.permission.BIND_JOB_SERVICE" />
+
     </application>
     <!-- Required to query activities that can process text, see:
          https://developer.android.com/training/package-visibility and

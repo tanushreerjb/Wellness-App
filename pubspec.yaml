@@ -48,6 +48,8 @@ dependencies:
   email_validator: ^3.0.0
   cloud_firestore: ^5.6.11
   show_hide_password: ^0.0.2
+  firebase_messaging: ^15.2.9
+  flutter_local_notifications: ^19.3.1
 
 dev_dependencies:
   flutter_test:

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hugeicons/hugeicons.dart';
+import 'package:show_hide_password/show_hide_password.dart';
 import 'package:wellness_app/features/dashboard/dashboard.dart';
 import 'package:wellness_app/features/auth/signup.dart';
 import 'package:wellness_app/features/auth/authservice.dart';
@@ -114,17 +115,25 @@ class _LoginPageState extends State<LoginPage> {
 
             SizedBox(
               width: 370.0,
-              child: TextField(
-                controller: passwordController,
-                decoration: InputDecoration(
-                  hintText: 'Enter your password',
-                  prefixIcon: Icon(
-                    Icons.password_outlined,
-                    size: 24.0,
-                    color: Colors.white70,
-                  ),
-                ),
-              ),
+              child:
+              ShowHidePassword(
+                  passwordField: (bool hidePassword){
+                    return  TextField(
+                      obscureText: hidePassword, //use the hidePassword status on obscureText to toggle the visibility
+                      decoration: InputDecoration(
+                        hintText: 'Enter your password',
+                        prefixIcon: Icon(
+                          Icons.password_outlined,
+                          size: 30.0,
+                          color: Colors.white70,
+                        ),
+                        /*suffixIcon: Icon(
+                        Icons.remove_red_eye,
+                        color: Colors.white,)*/
+                      ),
+                    );
+                  }
+              )
             ),
 
             Row(

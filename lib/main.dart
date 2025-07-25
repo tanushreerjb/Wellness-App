@@ -1,7 +1,12 @@
+import 'dart:developer';
+
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:wellness_app/features/auth/login.dart';
 import 'package:wellness_app/features/auth/signup.dart';
+import 'package:wellness_app/features/fcm_service.dart';
+import 'package:wellness_app/features/notification_service.dart';
 import 'package:wellness_app/user_preference.dart';
 import 'package:wellness_app/features/dashboard/dashboard.dart';
 import 'package:wellness_app/profile.dart';
@@ -12,13 +17,25 @@ import 'package:wellness_app/core/route/route_config.dart';
 import 'package:wellness_app/features/auth/login.dart';
 import 'package:wellness_app/add_quote.dart';
 import 'package:wellness_app/features/dashboard/admin_dashboard.dart';
+import 'package:wellness_app/features/fcm_service.dart';
 //import 'firebase_options.dart';
+
+@pragma('vm:entry-point')
+Future<void>firebaseBackgroundMessagingHandler(RemoteMessage message) async{
+  log("firebaseBAckgroundMessagingHandler main: $message");
+  await Firebase.initializeApp();
+  NotificationService().initializeLocalNotifications();
+  NotificationService().showNotification(message: message);
+}
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-
+  final FCMServices fcmServices = FCMServices();
   await Firebase.initializeApp();
-
+  await FCMServices().initializeCloudMessaging();
+  fcmServices.listenFCMMessage();
+  String? fcmToken = await fcmServices.getFCMToken();
+  log("fcm token: $fcmToken");
   runApp(const WellnessApp());
 }
 
