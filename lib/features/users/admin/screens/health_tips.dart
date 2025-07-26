@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
-import 'core/route/route_name.dart';
+import '../../../../core/route/route_name.dart';
+//import 'package:wellness_app/core/route/route_name.dart';
 
 class HealthTips extends StatefulWidget {
   const HealthTips({super.key});

@@ -1,4 +1,5 @@
 import 'dart:developer';
+import 'dart:math' hide log;
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:uuid/uuid.dart';
 
@@ -18,7 +19,6 @@ class FireStoreService {
             'email': email,
             'name': name,
             'userRole': 'customer',
-            'preferences': [],
           });
     } catch (e) {
       log("Failed to add new user data [insertNewUserData] : $e");
@@ -66,16 +66,49 @@ class FireStoreService {
     }
   }
 
+
   Future<void> updateUserPreferences({
     required String uuid,
+    required String name,
     required List<String> preferences,
   }) async {
     try {
-      await FirebaseFirestore.instance.collection("users").doc(uuid).update({
-        'preferences': preferences,
-      });
+
+      for (String preference in preferences) {
+        String preferenceId = Uuid().v4();
+        await FirebaseFirestore.instance
+            .collection("user_preferences")
+            .doc(preferenceId)
+            .set({
+          'id': preferenceId,
+          'userId': uuid, // Foreign key
+          'name': name,
+          'preferenceName': preference,
+        });
+      }
+
+      log("User preferences updated successfully for user: $uuid");
     } catch (e) {
       log("Failed to update user preferences [updateUserPreferences] : $e");
+      rethrow; // Re-throw to handle in UI
+    }
+  }
+
+  // Get user preferences from separate collection
+  Future<List<String>> getUserPreferences(String uuid) async {
+    try {
+      QuerySnapshot snapshot = await FirebaseFirestore.instance
+          .collection("user_preferences")
+          .where('userId', isEqualTo: uuid)
+          .get();
+
+      return snapshot.docs
+          .map((doc) => doc.data() as Map<String, dynamic>)
+          .map((data) => data['preferenceName'] as String)
+          .toList();
+    } catch (e) {
+      log("Failed to get user preferences [getUserPreferences] : $e");
+      return [];
     }
   }
 
@@ -171,6 +204,53 @@ class FireStoreService {
     } catch (e) {
       log("Failed to get total quote count [getTotalQuote]: $e");
       return 0;
+    }
+  }
+
+  // Get random quote for "Today's Quote" feature
+  Future<Map<String, dynamic>?> getRandomQuote() async {
+    try {
+      final snapshot = await FirebaseFirestore.instance
+          .collection("quotes")
+          .get();
+
+      if (snapshot.docs.isEmpty) return null;
+
+      final random = Random();
+      final randomDoc = snapshot.docs[random.nextInt(snapshot.docs.length)];
+
+      return {
+        'id': randomDoc.id,
+        ...randomDoc.data(),
+      };
+    } catch (e) {
+      log("Failed to get random quote [getRandomQuote]: $e");
+      return null;
+    }
+  }
+
+  // Get quotes based on user preferences
+  Future<List<Map<String, dynamic>>> getQuotesForUserPreferences({
+    required String userId,
+  }) async {
+    try {
+      // Get user preferences first
+      final preferences = await getUserPreferences(userId);
+
+      if (preferences.isEmpty) return [];
+
+      // Get quotes for all user preferences
+      List<Map<String, dynamic>> allQuotes = [];
+
+      for (String preference in preferences) {
+        final quotes = await getQuotesByCategory(categoryName: preference);
+        allQuotes.addAll(quotes);
+      }
+
+      return allQuotes;
+    } catch (e) {
+      log("Failed to get quotes for user preferences: $e");
+      return [];
     }
   }
 

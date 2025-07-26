@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:wellness_app/profile.dart';
-import 'package:wellness_app/quote.dart';
+
+import '../users/customer/screens/profile.dart';
+import '../users/customer/screens/quote.dart';
 
 class DashboardPage extends StatefulWidget {
   //final DashboardViewModel dashboardViewModel;

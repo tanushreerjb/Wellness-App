@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:hugeicons/hugeicons.dart';
 
 class QuotePage extends StatefulWidget {
-  const QuotePage({super.key});
+  final String ? categoryFilter;
+  const QuotePage({super.key,this.categoryFilter});
 
   @override
   State<QuotePage> createState() => _QuotePageState();

@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:wellness_app/add_category.dart';
-import 'package:wellness_app/add_quote.dart';
+import 'package:wellness_app/features/users/admin/screens/add_category.dart';
+import 'package:wellness_app/features/users/admin/screens/add_quote.dart';
 import 'package:wellness_app/features/dashboard/admin_dashboard.dart';
-import 'package:wellness_app/health_tips.dart';
+import 'package:wellness_app/features/users/admin/screens/health_tips.dart';
 import 'package:wellness_app/core/route/route_name.dart';
 import 'package:wellness_app/features/auth/login.dart';
-import 'package:wellness_app/features/dashboard/dashboard.dart';
-import 'package:wellness_app/user_preference.dart';
+import 'package:wellness_app/features/dashboard/customer_dashboard.dart';
+import 'package:wellness_app/features/users/customer/screens/user_preference.dart';
+
+import '../../features/users/admin/screens/add_category.dart';
 
 class RouteConfig {
   RouteConfig._();

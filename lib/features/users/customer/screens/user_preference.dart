@@ -4,9 +4,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:hugeicons/hugeicons.dart';
-import 'package:wellness_app/features/dashboard/dashboard.dart';
+import 'package:wellness_app/features/dashboard/customer_dashboard.dart';
 
-import 'core/route/route_name.dart';
+import '../../../../core/route/route_name.dart';
 import 'package:wellness_app/features/service/firestore_service.dart';
 
 class UserpreferencePage extends StatefulWidget {
@@ -44,6 +44,8 @@ class _UserpreferencePageState extends State<UserpreferencePage> {
     super.initState();
   }
 
+  // Modified _savePreferencesToFirebase method in UserPreferencePage:
+
   Future<void> _savePreferencesToFirebase() async {
     setState(() {
       isLoading = true;
@@ -51,36 +53,75 @@ class _UserpreferencePageState extends State<UserpreferencePage> {
 
     try {
       final user = FirebaseAuth.instance.currentUser;
-      if (user != null) {
-        // Get selected preferences using topics list instead of entry.key
-        List<String> selectedPreferences = [];
-        for (int i = 0; i < preferences.length; i++) {
-          if (preferences[i]) {
-            selectedPreferences.add(topics[i]);
-          }
-        }
-
-        // Use FireStoreService instead of direct Firestore call
-        await _fireStoreService.updateUserPreferences(
-          uuid: user.uid,
-          preferences: selectedPreferences,
-        );
-
-        // Navigate to dashboard
-        Navigator.of(context).pushNamed(AuthRouteName.dashboardScreen);
+      if (user == null) {
+        throw Exception('No authenticated user found');
       }
+
+      // Get selected preferences
+      List<String> selectedPreferences = [];
+      for (int i = 0; i < preferences.length; i++) {
+        if (preferences[i]) {
+          selectedPreferences.add(topics[i]);
+        }
+      }
+
+      // Validate that at least one preference is selected
+      if (selectedPreferences.isEmpty) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Please select at least one preference.'),
+            backgroundColor: Colors.red,
+          ),
+        );
+        return;
+      }
+
+      // Save preferences to separate collection using the modified FireStoreService
+
+      DocumentSnapshot userDoc = await FirebaseFirestore.instance
+          .collection("users")
+          .doc(user.uid)
+          .get();
+
+      String username = '';
+      if (userDoc.exists) {
+        Map<String, dynamic> userData = userDoc.data() as Map<String, dynamic>;
+        username = userData['name'] ?? user.displayName ?? 'Unknown';
+      } else {
+        username = user.displayName ?? 'Unknown';
+      }
+      await FireStoreService().updateUserPreferences(
+        uuid: user.uid,
+        name: username, // Pass the username
+        preferences: selectedPreferences,
+      );
+
+      // Show success message
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Preferences saved successfully!'),
+          backgroundColor: Colors.green,
+        ),
+      );
+
+      // Navigate to dashboard
+      Navigator.of(context).pushNamed(AuthRouteName.dashboardScreen);
+
     } catch (e) {
       log("Failed to save preferences: $e");
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text('Failed to save preferences. Please try again.'),
+          content: Text('Failed to save preferences: ${e.toString()}'),
           backgroundColor: Colors.red,
+          duration: const Duration(seconds: 5),
         ),
       );
     } finally {
-      setState(() {
-        isLoading = false;
-      });
+      if (mounted) {
+        setState(() {
+          isLoading = false;
+        });
+      }
     }
   }
 

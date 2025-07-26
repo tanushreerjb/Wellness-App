@@ -7,8 +7,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:hugeicons/hugeicons.dart';
 import 'package:wellness_app/features/auth/login.dart';
-import 'package:wellness_app/user_preference.dart';
-import 'package:wellness_app/features/auth/authservice.dart';
+import 'package:wellness_app/features/users/customer/screens/user_preference.dart';
+import 'package:wellness_app/features/service/authservice.dart';
 import 'package:uuid/uuid.dart';
 import 'package:show_hide_password/show_hide_password.dart';
 
@@ -192,60 +192,65 @@ class _SignupPageState extends State<SignupPage> {
               style: const ButtonStyle(
                 backgroundColor: WidgetStatePropertyAll(Colors.white),
               ),
-              onPressed: () async {
-                // Validate email
-                String? emailError = validateEmail(emailController.text);
-                if (emailError != null) {
-                  showMessage(emailError);
-                  return;
-                }
+                onPressed: () async {
+                  // Validate email
+                  String? emailError = validateEmail(emailController.text);
+                  if (emailError != null) {
+                    showMessage(emailError);
+                    return;
+                  }
 
-                // Validate password
-                String? passwordError = validatePassword(passwordController.text);
-                if (passwordError != null) {
-                  showMessage(passwordError);
-                  return;
-                }
+                  // Validate password
+                  String? passwordError = validatePassword(passwordController.text);
+                  if (passwordError != null) {
+                    showMessage(passwordError);
+                    return;
+                  }
 
-                setState(() {
-                  isLoading = true;
-                });
+                  setState(() {
+                    isLoading = true;
+                  });
 
-                try {
-                  UserCredential? user = await AuthService().signUpWithEmailPassword(emailController.text, passwordController.text, usernameController.text);
-                  if (user!= null) {
-                    FireStoreService().insertNewUserData(//stores data in db (firestore)
-                      email: user.user?.email??'',
-                      name: user.user?.email??'',
-                      uuid: user.user?.uid??'',
+                  try {
+                    UserCredential? user = await AuthService().signUpWithEmailPassword(
+                        emailController.text,
+                        passwordController.text,
+                        usernameController.text
                     );
-                    log("Signup success");
-                    Navigator.of(
-                      context,
-                    ).pushNamed(AuthRouteName.userPreferenceScreen);
-                  } else {
-                    log("Signup failed");
-                    showMessage('Signup Failed');
+
+                    if (user != null) {
+                      // Store user data in Firestore (without preferences)
+                      await FireStoreService().insertNewUserData(
+                        email: user.user?.email ?? '',
+                        name: usernameController.text, // Use username instead of email
+                        uuid: user.user?.uid ?? '',
+                      );
+
+                      log("Signup success");
+                      Navigator.of(context).pushNamed(AuthRouteName.userPreferenceScreen);
+                    } else {
+                      log("Signup failed");
+                      showMessage('Signup Failed');
+                    }
+                  } catch (e) {
+                    if (e is SocketException) {
+                      showMessage('No Internet Connection. Please try again later.');
+                    }
+                    else if (e is TimeoutException) {
+                      showMessage('Request timed out. Please try again later.');
+                    }
+                    else {
+                      showMessage('An unknown error occurred: ${e.toString()}');
+                    }
                   }
-                } catch (e) {
-                  if (e is SocketException) {
-                    print('No Internet Connection. Please try again later.');
+                  finally {
+                    if (mounted) {
+                      setState(() {
+                        isLoading = false;
+                      });
+                    }
                   }
-                  else if (e is TimeoutException) {
-                    print('Request timed out. Please try again later.');
-                  }
-                  else {
-                    print('An unknown error occurred');
-                  }
-                }
-                finally {
-                  if (mounted) {
-                    setState(() {
-                      isLoading = false;
-                    });
-                  }
-                }
-              },
+                },
               child: const Text('Signup'),
             ),
           ),

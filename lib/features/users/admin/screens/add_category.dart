@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:dotted_border/dotted_border.dart';
 
-import 'core/route/route_name.dart';
-import 'features/service/firestore_service.dart';
+import 'package:wellness_app/core/route/route_name.dart';
+import '../../../service/firestore_service.dart';
+import 'package:wellness_app/features/service/firestore_service.dart';
 
 class AddCategory extends StatefulWidget {
   final String userId;

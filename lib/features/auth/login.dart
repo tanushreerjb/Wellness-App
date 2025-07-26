@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:hugeicons/hugeicons.dart';
 import 'package:show_hide_password/show_hide_password.dart';
-import 'package:wellness_app/features/dashboard/dashboard.dart';
+import 'package:wellness_app/features/dashboard/customer_dashboard.dart';
 import 'package:wellness_app/features/auth/signup.dart';
-import 'package:wellness_app/features/auth/authservice.dart';
+import 'package:wellness_app/features/service/authservice.dart';
 import 'dart:developer'; // for log() function
 import 'package:firebase_auth/firebase_auth.dart'; // UserCredential, GoogleAuthProvider, FirebaseAuth
 import 'package:google_sign_in/google_sign_in.dart';

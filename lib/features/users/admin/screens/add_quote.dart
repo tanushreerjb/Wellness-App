@@ -1,8 +1,8 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
-import 'core/route/route_name.dart';
-import 'features/service/firestore_service.dart';
+import '../../../../core/route/route_name.dart';
+import '../../../service/firestore_service.dart';
 
 class AddQuote extends StatefulWidget {
   final String userId;
