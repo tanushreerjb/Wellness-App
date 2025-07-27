@@ -95,17 +95,20 @@ class FireStoreService {
   }
 
   // Get user preferences from separate collection
-  Future<List<String>> getUserPreferences(String uuid) async {
+  Future<List<String>> getUserPreferences(String? uuid) async {
     try {
       QuerySnapshot snapshot = await FirebaseFirestore.instance
           .collection("user_preferences")
           .where('userId', isEqualTo: uuid)
           .get();
 
-      return snapshot.docs
+
+      var result = snapshot.docs
           .map((doc) => doc.data() as Map<String, dynamic>)
           .map((data) => data['preferenceName'] as String)
           .toList();
+      log("Fetching $result");
+      return result;
     } catch (e) {
       log("Failed to get user preferences [getUserPreferences] : $e");
       return [];

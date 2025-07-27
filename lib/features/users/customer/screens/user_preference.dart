@@ -65,7 +65,7 @@ class _UserpreferencePageState extends State<UserpreferencePage> {
         }
       }
 
-      // Validate that at least one preference is selected
+      /*// Validate that at least one preference is selected
       if (selectedPreferences.isEmpty) {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
@@ -74,7 +74,7 @@ class _UserpreferencePageState extends State<UserpreferencePage> {
           ),
         );
         return;
-      }
+      }*/
 
       // Save preferences to separate collection using the modified FireStoreService
 
