@@ -263,8 +263,9 @@ class FireStoreService {
     try {
       final snapshot = await FirebaseFirestore.instance
           .collection("quotes")
-          .where('categoryName', isEqualTo: categoryName)
+          .where('name', isEqualTo: categoryName) // Changed from 'categoryName' to 'name'
           .get();
+
       return snapshot.docs.map((doc) => {
         'id': doc.id,
         ...doc.data(),
@@ -286,56 +287,6 @@ class FireStoreService {
           .set({'categoryName': categoryName, 'name': preferenceName});
     } catch (e) {
       log("Failed to add new user data [insertNewUserData] : $e");
-    }
-  }
-
-  Future<Map<String, dynamic>> fetchUserDataWithCategoriesAndPreferences(
-      String userId,
-      ) async {
-    try {
-      final FirebaseFirestore firestore = FirebaseFirestore.instance;
-
-      // 1. Fetch user data
-      final userDoc = await firestore
-          .collection("users")
-          .doc(userId)
-          .get();
-      if (!userDoc.exists) throw Exception('User not found');
-
-      final userData = userDoc.data()!;
-
-      // 2. Fetch categories for the user
-      final categorySnapshot = await firestore
-          .collection("category")
-          .where('userId', isEqualTo: userId)
-          .get();
-
-      List<Map<String, dynamic>> categoriesWithPreferences = [];
-
-      for (var categoryDoc in categorySnapshot.docs) {
-        final categoryData = categoryDoc.data();
-
-        // 3. Fetch preferences for each category
-        final preferenceSnapshot = await firestore
-            .collection("preferences")
-            .where('categoryName', isEqualTo: categoryData['name'])
-            .get();
-
-        final preferences = preferenceSnapshot.docs
-            .map((doc) => doc.data())
-            .toList();
-
-        categoriesWithPreferences.add({
-          'category': categoryData,
-          'preferences': preferences,
-        });
-      }
-
-      // 4. Combine user and category/preference data
-      return {'user': userData, 'categories': categoriesWithPreferences};
-    } catch (e) {
-      log("Error fetching user data with categories and preferences: $e");
-      rethrow;
     }
   }
 }
