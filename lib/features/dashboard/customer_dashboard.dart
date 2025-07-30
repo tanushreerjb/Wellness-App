@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:wellness_app/features/users/customer/screens/favorites.dart';
 
 import '../service/firestore_service.dart';
 import '../users/customer/screens/profile.dart';
@@ -189,7 +190,12 @@ class _DashboardPageState extends State<DashboardPage> {
                       ),
                     ),
                   ),
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => FavoritesPage()),
+                    );
+                  },
                   child: Text(
                     'My Favorites',
                     style: TextStyle(color: Colors.white),

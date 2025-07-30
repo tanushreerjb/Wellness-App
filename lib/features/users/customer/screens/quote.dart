@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:hugeicons/hugeicons.dart';
+import 'package:wellness_app/features/users/customer/screens/profile.dart';
 import '../../../service/firestore_service.dart';
 
 class QuotePage extends StatefulWidget {
@@ -18,6 +19,7 @@ class QuotePage extends StatefulWidget {
 class _QuotePageState extends State<QuotePage> {
   bool isChecked = false;
   bool isLoading = true;
+  bool isHeartClicked = false;
   Map<String, dynamic>? currentQuote;
 
   @override
@@ -43,6 +45,7 @@ class _QuotePageState extends State<QuotePage> {
             final random = Random();
             final randomIndex = random.nextInt(quotes.length);
             currentQuote = quotes[randomIndex];
+            isHeartClicked = false; // Reset heart state for new quote
           }
           isLoading = false;
         });
@@ -62,6 +65,11 @@ class _QuotePageState extends State<QuotePage> {
 
   Future<void> addToFavorites() async {
     if (currentQuote == null) return;
+
+    // Set heart to red immediately when clicked
+    setState(() {
+      isHeartClicked = true;
+    });
 
     try {
       final user = FirebaseAuth.instance.currentUser;
@@ -131,6 +139,17 @@ class _QuotePageState extends State<QuotePage> {
 
     return Scaffold(
       backgroundColor: Colors.black,
+      appBar: AppBar(
+        backgroundColor: Colors.black,
+        title: const Text(
+          'Quote',
+          style: TextStyle(
+            fontFamily: 'Poppins',
+            fontWeight: FontWeight.bold,
+            color: Colors.white,
+          ),
+        ),
+      ),
       body: isLoading
           ? Center(
         child: CircularProgressIndicator(
@@ -175,8 +194,8 @@ class _QuotePageState extends State<QuotePage> {
               IconButton(
                 onPressed: addToFavorites,
                 icon: Icon(
-                  Icons.favorite_border,
-                  color: Colors.white,
+                  isHeartClicked ? Icons.favorite : Icons.favorite_border,
+                  color: isHeartClicked ? Colors.red : Colors.white,
                   size: 30,
                 ),
               ),

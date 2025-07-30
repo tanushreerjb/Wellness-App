@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../core/route/route_name.dart';
 import '../service/firestore_service.dart';
+import '../users/customer/screens/profile.dart';
 
 class AdminDashboard extends StatefulWidget {
   const AdminDashboard({super.key});
@@ -69,7 +70,20 @@ class _AdminDashboardState extends State<AdminDashboard> {
             color: Colors.white,
           ),
         ),
-        automaticallyImplyLeading: false,
+        actions: [
+          RawMaterialButton(
+            child: CircleAvatar(
+              radius: 20,
+              backgroundImage: AssetImage('assets/images/Tanushree.JPG'),
+            ),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => ProfilePage()),
+              );
+            },
+          ),
+        ],
       ),
 
       body: Padding(

@@ -31,12 +31,23 @@ class _ProfilePageState extends State<ProfilePage> {
 
     return Scaffold(
       backgroundColor: Colors.black,
+      appBar: AppBar(
+        backgroundColor: Colors.black,
+        title: const Text(
+          'Profile',
+          style: TextStyle(
+            fontFamily: 'Poppins',
+            fontWeight: FontWeight.bold,
+            color: Colors.white,
+          ),
+        ),
+        //automaticallyImplyLeading: false,
+      ),
       body:Padding(
         padding: EdgeInsets.all(25.0),
       child: Column(
         spacing: 40,
         children: [
-          Text('Profile', textAlign: TextAlign.start),
           Row(
             spacing: 10.0,
             children: [
