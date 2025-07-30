@@ -64,18 +64,6 @@ class _UserpreferencePageState extends State<UserpreferencePage> {
           selectedPreferences.add(topics[i]);
         }
       }
-
-      /*// Validate that at least one preference is selected
-      if (selectedPreferences.isEmpty) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Please select at least one preference.'),
-            backgroundColor: Colors.red,
-          ),
-        );
-        return;
-      }*/
-
       // Save preferences to separate collection using the modified FireStoreService
 
       DocumentSnapshot userDoc = await FirebaseFirestore.instance

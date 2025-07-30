@@ -114,12 +114,16 @@ class _DashboardPageState extends State<DashboardPage> {
 
   void _navigateToQuotesByCategory(String categoryName) {
     // Navigate to quotes page with category filter
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => QuotePage(categoryFilter: categoryName),
-      ),
-    );
+    final user = FirebaseAuth.instance.currentUser;
+    if (user !=null) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) =>
+              QuotePage(categoryFilter: categoryName, userId: user.uid,),
+        ),
+      );
+    }
   }
 
   Widget build(BuildContext context) {

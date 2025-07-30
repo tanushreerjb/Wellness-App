@@ -1,12 +1,15 @@
 import 'dart:developer';
 import 'dart:math' hide log;
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:hugeicons/hugeicons.dart';
 import '../../../service/firestore_service.dart';
 
 class QuotePage extends StatefulWidget {
   final String? categoryFilter;
-  const QuotePage({super.key, this.categoryFilter});
+  final String userId;
+  const QuotePage({super.key, this.categoryFilter, required this.userId});
 
   @override
   State<QuotePage> createState() => _QuotePageState();
@@ -54,6 +57,61 @@ class _QuotePageState extends State<QuotePage> {
         isLoading = false;
         currentQuote = null;
       });
+    }
+  }
+
+  Future<void> addToFavorites() async {
+    if (currentQuote == null) return;
+
+    try {
+      final user = FirebaseAuth.instance.currentUser;
+      if (user!=null) {
+        DocumentSnapshot userDoc = await FirebaseFirestore.instance
+            .collection("users")
+            .doc(user.uid)
+            .get();
+
+        String username = '';
+        if (userDoc.exists) {
+          Map<String, dynamic> userData = userDoc.data() as Map<String,
+              dynamic>;
+          username = userData['name'] ?? user.displayName ?? 'Unknown';
+        } else {
+          username = user.displayName ?? 'Unknown';
+        }
+        bool success = await FireStoreService().addToFavorites(
+          userId: widget.userId,
+          quoteId: currentQuote!['id'],
+          quoteText: currentQuote!['quoteText'],
+          authorName: currentQuote!['authorName'],
+          categoryName: currentQuote!['name'],
+          userName: username,
+        );
+
+        if (success) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text('Quote added to favorites!'),
+              backgroundColor: Colors.green,
+            ),
+          );
+        } else {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text('Failed to add quote to favorites'),
+              backgroundColor: Colors.red,
+            ),
+          );
+        }
+      }
+    } catch (e) {
+      log('Error adding to favorites: $e');
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Error adding quote to favorites'),
+          backgroundColor: Colors.red,
+        ),
+      );
     }
   }
 
@@ -110,6 +168,21 @@ class _QuotePageState extends State<QuotePage> {
               ),
             ),
           ),
+
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              IconButton(
+                onPressed: addToFavorites,
+                icon: Icon(
+                  Icons.favorite_border,
+                  color: Colors.white,
+                  size: 30,
+                ),
+              ),
+            ],
+          ),
+
         ],
       ),
     );

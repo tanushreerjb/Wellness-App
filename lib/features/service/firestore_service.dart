@@ -257,6 +257,54 @@ class FireStoreService {
     }
   }
 
+  Future<bool> addToFavorites({
+    required String userId,
+    required String quoteId,
+    required String quoteText,
+    required String authorName,
+    required String categoryName,
+    required String userName,
+  }) async {
+    try {
+      String favoriteId = Uuid().v4();
+      await FirebaseFirestore.instance
+          .collection("user_favorites")
+          .doc(favoriteId)
+          .set({
+        'id': favoriteId,
+        'userId': userId,
+        'name':userName,
+        'quoteId': quoteId,
+        'quoteText': quoteText,
+        'authorName': authorName,
+        'categoryName': categoryName,
+      });
+
+      log("Quote added to favorites successfully for user: $userId");
+      return true;
+    } catch (e) {
+      log("Failed to add quote to favorites [addToFavorites] : $e");
+      return false;
+    }
+  }
+
+  // Get all favorite quotes for a user
+  Future<List<Map<String, dynamic>>> getUserFavorites(String userId) async {
+    try {
+      QuerySnapshot snapshot = await FirebaseFirestore.instance
+          .collection("user_favorites")
+          .where('userId', isEqualTo: userId)
+          .get();
+
+      return snapshot.docs
+          .map((doc) => doc.data() as Map<String, dynamic>)
+          .toList();
+    } catch (e) {
+      log("Failed to get user favorites [getUserFavorites] : $e");
+      return [];
+    }
+  }
+
   Future<List<Map<String, dynamic>>> getQuotesByCategory({
     required String categoryName,
   }) async {
