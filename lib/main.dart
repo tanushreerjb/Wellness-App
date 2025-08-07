@@ -3,10 +3,13 @@ import 'dart:developer';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:provider/provider.dart';
 import 'package:wellness_app/features/auth/login.dart';
 import 'package:wellness_app/features/auth/signup.dart';
 import 'package:wellness_app/features/service/fcm_service.dart';
 import 'package:wellness_app/features/service/notification_service.dart';
+import 'package:wellness_app/features/theme/theme_provider.dart';
 import 'package:wellness_app/features/users/customer/screens/user_preference.dart';
 import 'package:wellness_app/features/dashboard/customer_dashboard.dart';
 import 'package:wellness_app/features/users/customer/screens/profile.dart';
@@ -21,7 +24,7 @@ import 'package:wellness_app/features/service/fcm_service.dart';
 //import 'firebase_options.dart';
 
 @pragma('vm:entry-point')
-Future<void>firebaseBackgroundMessagingHandler(RemoteMessage message) async{
+Future<void> firebaseBackgroundMessagingHandler(RemoteMessage message) async {
   log("firebaseBAckgroundMessagingHandler main: $message");
   await Firebase.initializeApp();
   NotificationService().initializeLocalNotifications();
@@ -30,12 +33,15 @@ Future<void>firebaseBackgroundMessagingHandler(RemoteMessage message) async{
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  final FCMServices fcmServices = FCMServices();
   await Firebase.initializeApp();
-  await FCMServices().initializeCloudMessaging();
+
+  final FCMServices fcmServices = FCMServices();
+  await fcmServices.initializeCloudMessaging();
   fcmServices.listenFCMMessage();
+
   String? fcmToken = await fcmServices.getFCMToken();
-  log("fcm token: $fcmToken");
+  log('fcm token: $fcmToken');
+
   runApp(const WellnessApp());
 }
 
@@ -45,54 +51,143 @@ class WellnessApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'Week 2 Workshop',
-      theme: ThemeData(
-        fontFamily: 'Poppins',
-        scaffoldBackgroundColor: Colors.black,
-        colorScheme: ColorScheme.dark(secondary: Color(0xFF262626)),
-        iconButtonTheme: IconButtonThemeData(
-          style: ButtonStyle(iconColor: WidgetStateProperty.all(Colors.white)),
-        ),
-        iconTheme: IconThemeData(color: Colors.white),
-        appBarTheme: AppBarTheme(
-          backgroundColor: Colors.black,
-          titleTextStyle: TextStyle(fontSize: 20, color: Colors.white),
-        ),
-        bottomSheetTheme: BottomSheetThemeData(
-          backgroundColor: Colors.black,
-          elevation: 3,
-        ),
-        inputDecorationTheme: InputDecorationTheme(
-          filled: true,
-          fillColor: Color(0xFF1E1E1E),
-          border: OutlineInputBorder(
-            borderSide: BorderSide.none,
-            borderRadius: BorderRadius.all(Radius.circular(12)),
-          ),
-          hintStyle: TextStyle(color: Colors.grey),
-        ),
-        timePickerTheme: TimePickerThemeData(
-          backgroundColor: Color(0xFF1E1E1E),
-          hourMinuteTextColor: Color(0xFF1E1E1E),
-          hourMinuteColor: Colors.grey,
-          dayPeriodTextColor: Colors.white70,
-          dialBackgroundColor: Colors.black,
-          dialHandColor: Colors.white,
-          dialTextColor: Colors.white,
-          entryModeIconColor: Colors.white,
-          helpTextStyle: TextStyle(color: Colors.white),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.all(Radius.circular(24)),
-          ),
-        ),
-        textTheme: TextTheme(bodyMedium: TextStyle(color: Colors.white)),
-        hoverColor: Colors.transparent,
-      ),
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (provider) => ThemeProvider()),
+      ],
+      child: ScreenUtilInit(
+        designSize: const Size(360, 690),
+        minTextAdapt: true,
+        splitScreenMode: true,
+        builder: (_, Widget? child) {
+          return Consumer<ThemeProvider>(
+            //reflect in UI if any change is made
+            builder:
+                (
+                  BuildContext context,
+                  ThemeProvider themeProvider,
+                  Widget? child,
+                ) {
+                  log("th:${themeProvider.isDarkMode}");
+                  return MaterialApp(
+                    themeMode: themeProvider.isDarkMode
+                        ? ThemeMode.dark
+                        : ThemeMode.light,
+                    debugShowCheckedModeBanner: false,
+                    title: 'Week 2 Workshop',
+                    theme: ThemeData(
+                      fontFamily: 'Poppins',
+                      scaffoldBackgroundColor: Colors.black,
+                      colorScheme: ColorScheme.dark(
+                        secondary: Color(0xFF262626),
+                      ),
+                      iconButtonTheme: IconButtonThemeData(
+                        style: ButtonStyle(
+                          iconColor: WidgetStateProperty.all(Colors.white),
+                        ),
+                      ),
+                      iconTheme: IconThemeData(color: Colors.white),
+                      appBarTheme: AppBarTheme(
+                        backgroundColor: Colors.black,
+                        titleTextStyle: TextStyle(
+                          fontSize: 20,
+                          color: Colors.white,
+                        ),
+                      ),
+                      bottomSheetTheme: BottomSheetThemeData(
+                        backgroundColor: Colors.black,
+                        elevation: 3,
+                      ),
+                      inputDecorationTheme: InputDecorationTheme(
+                        filled: true,
+                        fillColor: Color(0xFF1E1E1E),
+                        border: OutlineInputBorder(
+                          borderSide: BorderSide.none,
+                          borderRadius: BorderRadius.all(Radius.circular(12)),
+                        ),
+                        hintStyle: TextStyle(color: Colors.grey),
+                      ),
+                      timePickerTheme: TimePickerThemeData(
+                        backgroundColor: Color(0xFF1E1E1E),
+                        hourMinuteTextColor: Color(0xFF1E1E1E),
+                        hourMinuteColor: Colors.grey,
+                        dayPeriodTextColor: Colors.white70,
+                        dialBackgroundColor: Colors.black,
+                        dialHandColor: Colors.white,
+                        dialTextColor: Colors.white,
+                        entryModeIconColor: Colors.white,
+                        helpTextStyle: TextStyle(color: Colors.white),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(24)),
+                        ),
+                      ),
+                      textTheme: TextTheme(
+                        bodyMedium: TextStyle(color: Colors.white),
+                      ),
+                      hoverColor: Colors.transparent,
+                    ),
 
-      onGenerateRoute: RouteConfig.generateRoute,
-      initialRoute: RoutesName.defaultScreen,
+
+                    darkTheme: ThemeData(
+                      fontFamily: 'Poppins',
+                      scaffoldBackgroundColor: Colors.white,
+                      colorScheme: ColorScheme.dark(
+                        secondary: Colors.black,
+                        //Color(0xFF262626),
+                      ),
+                      iconButtonTheme: IconButtonThemeData(
+                        style: ButtonStyle(
+                          iconColor: WidgetStateProperty.all(Colors.black),
+                        ),
+                      ),
+                      iconTheme: IconThemeData(color: Colors.black),
+                      appBarTheme: AppBarTheme(
+                        backgroundColor: Colors.white,
+                        titleTextStyle: TextStyle(
+                          fontSize: 20,
+                          color: Colors.black,
+                        ),
+                      ),
+                      bottomSheetTheme: BottomSheetThemeData(
+                        backgroundColor: Colors.black,
+                        elevation: 3,
+                      ),
+                      inputDecorationTheme: InputDecorationTheme(
+                        filled: true,
+                        fillColor: Color(0xFF1E1E1E),
+                        border: OutlineInputBorder(
+                          borderSide: BorderSide.none,
+                          borderRadius: BorderRadius.all(Radius.circular(12)),
+                        ),
+                        hintStyle: TextStyle(color: Colors.grey),
+                      ),
+                      timePickerTheme: TimePickerThemeData(
+                        backgroundColor: Colors.white,
+                        // backgroundColor: Color(0xFF1E1E1E),
+                        hourMinuteTextColor: Color(0xFF1E1E1E),
+                        hourMinuteColor: Colors.grey,
+                        dayPeriodTextColor: Colors.white70,
+                        dialBackgroundColor: Colors.black,
+                        dialHandColor: Colors.black,
+                        dialTextColor: Colors.black,
+                        entryModeIconColor: Colors.black,
+                        helpTextStyle: TextStyle(color: Colors.black),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(24)),
+                        ),
+                      ),
+                      textTheme: TextTheme(
+                        bodyMedium: TextStyle(color: Colors.white),
+                      ),
+                      hoverColor: Colors.transparent,
+                    ),
+                    onGenerateRoute: RouteConfig.generateRoute,
+                    initialRoute: RoutesName.defaultScreen,
+                  );
+                },
+          );
+        },
+      ),
     );
   }
 }

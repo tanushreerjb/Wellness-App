@@ -50,6 +50,9 @@ dependencies:
   show_hide_password: ^0.0.2
   firebase_messaging: ^15.2.9
   flutter_local_notifications: ^19.3.1
+  shimmer: ^3.0.0
+  http: ^1.1.0
+  provider: ^6.1.5
 
 dev_dependencies:
   flutter_test:

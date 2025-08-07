@@ -105,4 +105,43 @@ class NotificationService {
       payload: json.encode(message.data),
     );
   }
+  Future<void> showLocalNotification({
+    required String title,
+    required String body,
+    String? payload,
+  }) async {
+    const String channelId = 'wellness_channel';
+    const String channelName = 'Wellness Notifications';
+    const String channelDesc = 'Notifications for wellness updates';
+
+    // Generate a unique 32-bit integer ID for the notification
+    final int notificationId = DateTime.now().millisecondsSinceEpoch % 2147483647;
+
+    final NotificationDetails platformChannelSpecifics = NotificationDetails(
+      android: AndroidNotificationDetails(
+        channelId,
+        channelName,
+        channelDescription: channelDesc,
+        importance: Importance.max,
+        priority: Priority.high,
+        playSound: true,
+        enableVibration: true,
+        showWhen: true,
+        icon: 'notification'
+      ),
+      iOS: const DarwinNotificationDetails(
+        presentAlert: true,
+        presentBadge: true,
+        presentSound: true,
+      ),
+    );
+
+    await flutterLocalNotificationsPlugin.show(
+      notificationId,
+      title,
+      body,
+      platformChannelSpecifics,
+      payload: payload,
+    );
+  }
 }

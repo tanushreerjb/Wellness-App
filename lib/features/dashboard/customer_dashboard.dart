@@ -1,10 +1,15 @@
+import 'dart:convert';
 import 'dart:developer';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:wellness_app/features/users/customer/screens/favorites.dart';
 
+import '../service/fcm_service.dart';
 import '../service/firestore_service.dart';
+import '../service/notification_service.dart';
 import '../users/customer/screens/profile.dart';
 import '../users/customer/screens/quote.dart';
 
@@ -27,6 +32,51 @@ class _DashboardPageState extends State<DashboardPage> {
     loadDashboardData();
   }
 
+  Future<void> _checkPendingNotifications() async {
+    try {
+      final user = FirebaseAuth.instance.currentUser;
+      if (user != null) {
+        // Update FCM token for current session
+        await FCMServices().updateFCMTokenForUser(user.uid);
+
+        // Get pending notifications
+        List<Map<String, dynamic>> pendingNotifications =
+        await FireStoreService().getPendingNotifications(user.uid);
+
+        if (pendingNotifications.isNotEmpty) {
+          // Show local notifications for pending notifications
+          for (var notification in pendingNotifications) {
+            await NotificationService().showLocalNotification(
+              title: notification['title'],
+              body: notification['body'],
+              payload: json.encode({
+                'categoryName': notification['categoryName'],
+                'type': 'new_quote',
+              }),
+            );
+          }
+
+          // Mark notifications as read
+          await FireStoreService().markNotificationsAsRead(user.uid);
+
+          // Show snackbar
+          if (mounted) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text('${pendingNotifications.length} new quotes available!'),
+                backgroundColor: Colors.green,
+                duration: Duration(seconds: 3),
+              ),
+            );
+          }
+        }
+      }
+    } catch (e) {
+      log('Error checking pending notifications: $e');
+    }
+  }
+
+// Update your loadDashboardData method:
   Future <void> loadDashboardData() async{
     setState(() {
       isLoading = true;
@@ -41,6 +91,9 @@ class _DashboardPageState extends State<DashboardPage> {
           userPreference = preferences;
           isLoading = false;
         });
+
+        // Check for pending notifications
+        await _checkPendingNotifications();
       } else {
         setState(() {
           isLoading = false;
@@ -50,7 +103,6 @@ class _DashboardPageState extends State<DashboardPage> {
       log('Error loading dashboard data: $e');
       setState(() {
         isLoading = false;
-        // Optionally set userPreference to empty list or show error state
         userPreference = [];
       });
     }

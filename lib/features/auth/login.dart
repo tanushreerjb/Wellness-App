@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hugeicons/hugeicons.dart';
+import 'package:provider/provider.dart';
 import 'package:show_hide_password/show_hide_password.dart';
 import 'package:wellness_app/features/dashboard/customer_dashboard.dart';
 import 'package:wellness_app/features/auth/signup.dart';
@@ -9,6 +10,7 @@ import 'package:firebase_auth/firebase_auth.dart'; // UserCredential, GoogleAuth
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:wellness_app/core/route/route_name.dart';
 import 'package:email_validator/email_validator.dart';
+import 'package:wellness_app/features/theme/theme_provider.dart';
 
 import '../service/firestore_service.dart';
 
@@ -315,6 +317,19 @@ class _LoginPageState extends State<LoginPage> {
                     decoration: TextDecoration.underline),
               ),
             ),
+
+            Center(
+              child: TextButton(
+                  onPressed: (){
+                    context.read<ThemeProvider>().toggleTheme();
+                    //Provider.of<ThemeProvider>(context,listen:false).toggleTheme();//any one
+                  },
+                  child: const Text(
+                    "Toggle Theme",
+                    style: TextStyle(color: Colors.white),
+                  )
+              ),
+            )
 
           ], //Children
         ),

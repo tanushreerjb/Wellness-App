@@ -3,6 +3,8 @@ import 'dart:math' hide log;
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:uuid/uuid.dart';
 
+import 'notification_helper.dart';
+
 class FireStoreService {
   final String _generateUniqueId = Uuid().v4();
 
@@ -140,10 +142,27 @@ class FireStoreService {
   }) async {
     try {
       String id = _generateUniqueId;
+
+      // Add the quote to Firestore
       await FirebaseFirestore.instance
           .collection("quotes")
           .doc(id)
-          .set({'userId': userId, 'name': categoryName, 'authorName': authorName, 'quoteText': quoteText,'id': id});
+          .set({
+        'userId': userId,
+        'name': categoryName,
+        'authorName': authorName,
+        'quoteText': quoteText,
+        'id': id,
+        'timestamp': FieldValue.serverTimestamp(),
+      });
+
+      // Send notifications to users with this preference
+      await NotificationHelper.sendNewQuoteNotification(
+        categoryName: categoryName,
+        authorName: authorName,
+        quoteText: quoteText,
+      );
+
       return true;
     } catch (e) {
       log("Failed to add new quote : $e");
@@ -335,6 +354,112 @@ class FireStoreService {
           .set({'categoryName': categoryName, 'name': preferenceName});
     } catch (e) {
       log("Failed to add new user data [insertNewUserData] : $e");
+    }
+  }
+
+  Future<List<Map<String, dynamic>>> getUsersWithPreference(String preferenceName) async {
+    try {
+      // Get all users who have this preference
+      QuerySnapshot preferenceSnapshot = await FirebaseFirestore.instance
+          .collection("user_preferences")
+          .where('preferenceName', isEqualTo: preferenceName)
+          .get();
+
+      List<String> userIds = preferenceSnapshot.docs
+          .map((doc) => doc.data() as Map<String, dynamic>)
+          .map((data) => data['userId'] as String)
+          .toList();
+
+      if (userIds.isEmpty) return [];
+
+      // Get user details including FCM tokens
+      List<Map<String, dynamic>> users = [];
+      for (String userId in userIds) {
+        DocumentSnapshot userDoc = await FirebaseFirestore.instance
+            .collection("users")
+            .doc(userId)
+            .get();
+
+        if (userDoc.exists) {
+          Map<String, dynamic> userData = userDoc.data() as Map<String, dynamic>;
+          if (userData['fcmToken'] != null) {
+            users.add({
+              'userId': userId,
+              'fcmToken': userData['fcmToken'],
+              'name': userData['name'],
+            });
+          }
+        }
+      }
+
+      return users;
+    } catch (e) {
+      log("Failed to get users with preference: $e");
+      return [];
+    }
+  }
+
+// Store pending notifications for offline users
+  Future<void> storePendingNotification({
+    required String userId,
+    required String title,
+    required String body,
+    required String categoryName,
+  }) async {
+    try {
+      String notificationId = Uuid().v4();
+      await FirebaseFirestore.instance
+          .collection("pending_notifications")
+          .doc(notificationId)
+          .set({
+        'id': notificationId,
+        'userId': userId,
+        'title': title,
+        'body': body,
+        'categoryName': categoryName,
+        'timestamp': FieldValue.serverTimestamp(),
+        'isRead': false,
+      });
+    } catch (e) {
+      log("Failed to store pending notification: $e");
+    }
+  }
+
+// Get pending notifications for a user
+  Future<List<Map<String, dynamic>>> getPendingNotifications(String userId) async {
+    try {
+      QuerySnapshot snapshot = await FirebaseFirestore.instance
+          .collection("pending_notifications")
+          .where('userId', isEqualTo: userId)
+          .where('isRead', isEqualTo: false)
+          .orderBy('timestamp', descending: true)
+          .get();
+
+      return snapshot.docs
+          .map((doc) => doc.data() as Map<String, dynamic>)
+          .toList();
+    } catch (e) {
+      log("Failed to get pending notifications: $e");
+      return [];
+    }
+  }
+
+// Mark notifications as read
+  Future<void> markNotificationsAsRead(String userId) async {
+    try {
+      QuerySnapshot snapshot = await FirebaseFirestore.instance
+          .collection("pending_notifications")
+          .where('userId', isEqualTo: userId)
+          .where('isRead', isEqualTo: false)
+          .get();
+
+      WriteBatch batch = FirebaseFirestore.instance.batch();
+      for (DocumentSnapshot doc in snapshot.docs) {
+        batch.update(doc.reference, {'isRead': true});
+      }
+      await batch.commit();
+    } catch (e) {
+      log("Failed to mark notifications as read: $e");
     }
   }
 }
