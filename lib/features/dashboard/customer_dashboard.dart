@@ -7,6 +7,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:wellness_app/features/users/customer/screens/favorites.dart';
 
+import '../../core/route/route_name.dart';
 import '../service/fcm_service.dart';
 import '../service/firestore_service.dart';
 import '../service/notification_service.dart';
@@ -21,7 +22,7 @@ class DashboardPage extends StatefulWidget {
   State<DashboardPage> createState() => _DashboardPageState();
 }
 
-class _DashboardPageState extends State<DashboardPage> {
+class _DashboardPageState extends State<DashboardPage> with WidgetsBindingObserver {
   bool isChecked = false;
   bool isLoading = false;
   List<String> userPreference = [];
@@ -29,7 +30,22 @@ class _DashboardPageState extends State<DashboardPage> {
   @override
   void initState(){
     super.initState();
+    WidgetsBinding.instance.addObserver(this);
     loadDashboardData();
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed) {
+      // Refresh dashboard when app comes back to foreground
+      loadDashboardData();
+    }
   }
 
   Future<void> _checkPendingNotifications() async {
@@ -220,183 +236,213 @@ class _DashboardPageState extends State<DashboardPage> {
           ),
         ],
       ),
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        spacing: 10,
-        //crossAxisAlignment: CrossAxisAlignment.center,
-        //mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              SizedBox(
-                width: 180.0,
-                height: 55,
-                child: FilledButton(
-                  style: ButtonStyle(
-                    backgroundColor: WidgetStatePropertyAll(Colors.white30),
-                    shape: WidgetStatePropertyAll(
-                      RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(16.0),
-                      ),
-                    ),
-                  ),
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => FavoritesPage()),
-                    );
-                  },
-                  child: Text(
-                    'My Favorites',
-                    style: TextStyle(color: Colors.white),
-                  ),
-                ),
-              ),
-
-              /*const SizedBox(width: 50),*/
-              SizedBox(
-                width: 180.0,
-                height: 55,
-                child: FilledButton(
-                  style: ButtonStyle(
-                    backgroundColor: WidgetStatePropertyAll(Colors.white30),
-                    shape: WidgetStatePropertyAll(
-                      RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(16.0),
-                      ),
-                    ),
-                  ),
-                  onPressed: () {},
-                  child: Text(
-                    'Remind Me',
-                    style: TextStyle(color: Colors.white),
-                  ),
-                ),
-              ),
-            ],
-          ),
-
-          Row(
-            children: [
-              SizedBox(width: 23),
-              Text(
-                "Today's Quote",
-                style: TextStyle(
-                  fontSize: 25,
-                  fontWeight: FontWeight.bold,
-                  fontFamily: 'Poppins',
-                  color: Colors.white,
-                ),
-              ),
-            ],
-          ),
-
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              SizedBox(
-                width: 370.0,
-                height: 80.0,
-                child: FilledButton(
-                  style: ButtonStyle(
-                    backgroundColor: WidgetStatePropertyAll(Colors.white30),
-                    shape: WidgetStatePropertyAll(
-                      RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(16.0),
-                      ),
-                    ),
-                  ),
-                  onPressed: () {},
-                  child: Text(
-                    '"Your wellness is an investment, not an expense" - Author Name',
-                    style: TextStyle(color: Colors.white),
-                  ),
-                ),
-              ),
-            ],
-          ),
-
-          Row(
-            children: [
-              SizedBox(width: 35),
-              Text(
-                "Quotes",
-                style: TextStyle(
-                  fontSize: 30,
-                  fontWeight: FontWeight.bold,
-                  fontFamily: 'Poppins',
-                  color: Colors.white,
-                ),
-              ),
-            ],
-          ),
-
-          // Dynamic user preferences section
-          if (userPreference.isNotEmpty) ...[
-            Column(
-              children: userPreference
-                  .map((preference) => _buildPreferenceButton(preference))
-                  .toList(),
-            ),
-          ]
-          else ...[
-            // Show default categories if no preferences set
-            SizedBox(height: 10,),
-            Column(
+      body: SingleChildScrollView(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          spacing: 20,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
-                Text("No Preferences Selected!")
+                SizedBox(
+                  width: 180.0,
+                  height: 55,
+                  child: FilledButton(
+                    style: ButtonStyle(
+                      backgroundColor: WidgetStatePropertyAll(Colors.white30),
+                      shape: WidgetStatePropertyAll(
+                        RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(16.0),
+                        ),
+                      ),
+                    ),
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => FavoritesPage()),
+                      );
+                    },
+                    child: Text(
+                      'My Favorites',
+                      style: TextStyle(color: Colors.white),
+                    ),
+                  ),
+                ),
+
+                SizedBox(
+                  width: 180.0,
+                  height: 55,
+                  child: FilledButton(
+                    style: ButtonStyle(
+                      backgroundColor: WidgetStatePropertyAll(Colors.white30),
+                      shape: WidgetStatePropertyAll(
+                        RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(16.0),
+                        ),
+                      ),
+                    ),
+                    onPressed: () {
+                      Navigator.of(
+                        context,
+                      ).pushNamed(AuthRouteName.userPreferenceScreen);
+                    },
+                    child: Text(
+                      'Preferences',
+                      style: TextStyle(color: Colors.white),
+                    ),
+                  ),
+                ),
               ],
             ),
-          ],
 
-          SizedBox(height: 10,),
-          Row(
-            children: [
-              SizedBox(width: 35),
-              Text(
-                "Health Tips",
-                style: TextStyle(
-                  fontSize: 30,
-                  fontWeight: FontWeight.bold,
-                  fontFamily: 'Poppins',
-                  color: Colors.white,
+            Row(
+              children: [
+                SizedBox(width: 7),
+                Text(
+                  "Today's Quote",
+                  style: TextStyle(
+                    fontSize: 25,
+                    fontWeight: FontWeight.bold,
+                    fontFamily: 'Poppins',
+                    color: Colors.white,
+                  ),
                 ),
-              ),
-            ],
-          ),
+              ],
+            ),
 
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              SizedBox(
-                width: 350.0,
-                height: 70.0,
-                child: FilledButton.icon(
-                  onPressed: () {},
-                  icon: Icon(Icons.sunny, size: 20, color: Colors.white),
-                  style: ButtonStyle(
-                    alignment: Alignment.centerLeft,
-                    backgroundColor: WidgetStatePropertyAll(Colors.white30),
-                    shape: WidgetStatePropertyAll(
-                      RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(20.0),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                SizedBox(
+                  width: 370.0,
+                  height: 80.0,
+                  child: FilledButton(
+                    style: ButtonStyle(
+                      backgroundColor: WidgetStatePropertyAll(Colors.white30),
+                      shape: WidgetStatePropertyAll(
+                        RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(16.0),
+                        ),
                       ),
                     ),
-                  ),
-                  label: Text(
-                    'Breathe to Reset',
-                    style: TextStyle(color: Colors.white),
+                    onPressed: () {},
+                    child: Text(
+                      '"Your wellness is an investment, not an expense" - Author Name',
+                      style: TextStyle(color: Colors.white),
+                    ),
                   ),
                 ),
+              ],
+            ),
+
+            Row(
+              children: [
+                SizedBox(width: 7),
+                Text(
+                  "Quotes",
+                  style: TextStyle(
+                    fontSize: 30,
+                    fontWeight: FontWeight.bold,
+                    fontFamily: 'Poppins',
+                    color: Colors.white,
+                  ),
+                ),
+              ],
+            ),
+
+            // Dynamic user preferences section
+            if (isLoading) ...[
+              Center(
+                child: CircularProgressIndicator(color: Colors.white),
               ),
-            ],
-          ),
+            ]
+            else
+              if (userPreference.isNotEmpty) ...[
+                Column(
+                  children: userPreference
+                      .map((preference) => _buildPreferenceButton(preference))
+                      .toList(),
+                ),
+              ]
+              else
+                ...[
+                  SizedBox(height: 20),
+                  Column(
+                    children: [
+                      Text(
+                        "No Preferences Selected!",
+                        style: TextStyle(
+                          color: Colors.white70,
+                          fontSize: 16,
+                        ),
+                      ),
+                      SizedBox(height: 10),
+                      TextButton(
+                        onPressed: () {
+                          Navigator.of(context).pushNamed(
+                              AuthRouteName.userPreferenceScreen);
+                        },
+                        child: Text(
+                          "Set Your Preferences",
+                          style: TextStyle(
+                            color: Colors.white,
+                            decoration: TextDecoration.underline,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
 
+            Row(
+              children: [
+                SizedBox(width: 7),
+                Text(
+                  "Health Tips",
+                  style: TextStyle(
+                    fontSize: 30,
+                    fontWeight: FontWeight.bold,
+                    fontFamily: 'Poppins',
+                    color: Colors.white,
+                  ),
+                ),
+              ],
+            ),
 
-        ], //Children
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                SizedBox(
+                  width: 350.0,
+                  height: 70.0,
+                  child: FilledButton.icon(
+                    onPressed: () {},
+                    icon: Icon(Icons.sunny, size: 20, color: Colors.white),
+                    style: ButtonStyle(
+                      alignment: Alignment.centerLeft,
+                      backgroundColor: WidgetStatePropertyAll(Colors.white30),
+                      shape: WidgetStatePropertyAll(
+                        RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(20.0),
+                        ),
+                      ),
+                    ),
+                    label: Text(
+                      'Breathe to Reset',
+                      style: TextStyle(color: Colors.white),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+
+            // Add some bottom padding for better scrolling experience
+            SizedBox(height: 20),
+          ],
+        ),
       ),
     );
   }
-}
+  }

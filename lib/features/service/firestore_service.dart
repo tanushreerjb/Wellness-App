@@ -18,10 +18,10 @@ class FireStoreService {
           .collection("users") //Collection or Table in database
           .doc(uuid)
           .set({
-            'email': email,
-            'name': name,
-            'userRole': 'customer',
-          });
+        'email': email,
+        'name': name,
+        'userRole': 'customer',
+      });
     } catch (e) {
       log("Failed to add new user data [insertNewUserData] : $e");
     }
@@ -68,14 +68,17 @@ class FireStoreService {
     }
   }
 
-
+  // Updated method to properly handle preference updates (delete old, add new)
   Future<void> updateUserPreferences({
     required String uuid,
     required String name,
     required List<String> preferences,
   }) async {
     try {
+      // First, delete all existing preferences for this user
+      await _deleteUserPreferences(uuid);
 
+      // Then add the new preferences
       for (String preference in preferences) {
         String preferenceId = Uuid().v4();
         await FirebaseFirestore.instance
@@ -96,6 +99,28 @@ class FireStoreService {
     }
   }
 
+  // Helper method to delete all existing preferences for a user
+  Future<void> _deleteUserPreferences(String userId) async {
+    try {
+      QuerySnapshot snapshot = await FirebaseFirestore.instance
+          .collection("user_preferences")
+          .where('userId', isEqualTo: userId)
+          .get();
+
+      // Use batch to delete all existing preferences
+      WriteBatch batch = FirebaseFirestore.instance.batch();
+      for (DocumentSnapshot doc in snapshot.docs) {
+        batch.delete(doc.reference);
+      }
+      await batch.commit();
+
+      log("Deleted existing preferences for user: $userId");
+    } catch (e) {
+      log("Failed to delete user preferences: $e");
+      rethrow;
+    }
+  }
+
   // Get user preferences from separate collection
   Future<List<String>> getUserPreferences(String? uuid) async {
     try {
@@ -103,7 +128,6 @@ class FireStoreService {
           .collection("user_preferences")
           .where('userId', isEqualTo: uuid)
           .get();
-
 
       var result = snapshot.docs
           .map((doc) => doc.data() as Map<String, dynamic>)
@@ -463,4 +487,3 @@ class FireStoreService {
     }
   }
 }
-
